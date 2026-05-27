@@ -1,0 +1,1667 @@
+/* ============================================================
+   Pedro Santos — Apresentação Executiva
+   Identidade herdada do portfólio (src/styles/tokens.css)
+   Arco narrativo: Sparkline de Nancy Duarte (what is ↔ what could be)
+   Sistema visual: Fraunces display + Inter body, verde-tinta acento
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Tokens herdados do site */
+  --bg-canvas: oklch(98% 0.005 90);
+  --bg-surface: oklch(94% 0.005 90);
+  --bg-surface-2: oklch(90% 0.005 90);
+  --fg-primary: oklch(15% 0.01 270);
+  --fg-secondary: oklch(35% 0.01 270);
+  --fg-muted: oklch(55% 0.01 270);
+  --border: oklch(88% 0.005 90);
+  --border-strong: oklch(75% 0.005 90);
+  --accent: oklch(45% 0.15 155);
+  --accent-hover: oklch(38% 0.16 155);
+  --accent-soft: oklch(93% 0.04 155);
+  --focus-ring: oklch(45% 0.15 155);
+  --danger: oklch(50% 0.18 25);
+  --on-accent: oklch(98% 0.005 90);
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Slide dimensões (16:9 base 1920×1080) */
+  --slide-w: 1920;
+  --slide-h: 1080;
+}
+
+[data-theme='dark'] {
+  --bg-canvas: oklch(13% 0.01 250);
+  --bg-surface: oklch(17% 0.01 250);
+  --bg-surface-2: oklch(21% 0.01 250);
+  --fg-primary: oklch(95% 0.005 90);
+  --fg-secondary: oklch(78% 0.005 90);
+  --fg-muted: oklch(58% 0.01 270);
+  --border: oklch(28% 0.01 250);
+  --border-strong: oklch(38% 0.01 250);
+  --accent: oklch(65% 0.15 155);
+  --accent-hover: oklch(72% 0.14 155);
+  --accent-soft: oklch(22% 0.04 155);
+  --focus-ring: oklch(65% 0.15 155);
+  --danger: oklch(65% 0.18 25);
+  --on-accent: oklch(13% 0.01 250);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--fg-primary);
+  font-family: var(--font-body);
+  color: var(--fg-primary);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================
+   PALCO — escala fluida 16:9
+   ============================================================ */
+.stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--fg-primary);
+}
+
+.deck {
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+  position: relative;
+  background: var(--bg-canvas);
+  overflow: hidden;
+  box-shadow: 0 40px 80px -20px oklch(0% 0 0 / 0.4);
+}
+
+/* ============================================================
+   SLIDES
+   ============================================================ */
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 96px 128px;
+  display: none;
+  flex-direction: column;
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+}
+
+.slide.is-active { display: flex; }
+
+/* Linha-assinatura sutil (page edge marker do design system) */
+.slide::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
+}
+
+/* Header de slide — meta + número */
+.slide-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 64px;
+}
+
+.slide-meta .mark {
+  display: flex; align-items: center; gap: 12px;
+  color: var(--fg-secondary);
+}
+
+.slide-meta .mark::before {
+  content: '';
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.slide-meta .number { font-variant-numeric: tabular-nums; }
+
+/* Footer no canto inferior — sempre presente, discreto */
+.slide-footer {
+  position: absolute;
+  bottom: 48px;
+  left: 128px;
+  right: 128px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+
+/* ============================================================
+   TIPOGRAFIA
+   ============================================================ */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+}
+
+h1.display {
+  font-family: var(--font-display);
+  font-size: 160px;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--fg-primary);
+}
+
+h1.hero {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+}
+
+h1.title {
+  font-family: var(--font-display);
+  font-size: 96px;
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+h2.section {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 24px;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--fg-secondary);
+  max-width: 1100px;
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--fg-secondary);
+  max-width: 900px;
+}
+
+.caption {
+  font-family: var(--font-body);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+
+em.italic, .italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.accent-text { color: var(--accent); }
+.strike { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--fg-muted); }
+
+/* ============================================================
+   SLIDE 01 — Capa
+   ============================================================ */
+.slide-cover {
+  justify-content: space-between;
+}
+
+.slide-cover .top-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+
+.slide-cover .cover-mark {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-secondary);
+  display: flex; align-items: center; gap: 14px;
+}
+
+.slide-cover .cover-mark::before {
+  content: '';
+  width: 14px; height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.slide-cover .cover-content {
+  display: flex; flex-direction: column; gap: 48px;
+  margin-top: 80px;
+  max-width: 1500px;
+}
+
+.slide-cover h1 {
+  font-family: var(--font-display);
+  font-size: 220px;
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--fg-primary);
+}
+
+.slide-cover h1 .italic {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--accent);
+}
+
+.slide-cover .role-line {
+  font-family: var(--font-body);
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--fg-secondary);
+  max-width: 900px;
+  line-height: 1.3;
+}
+
+.slide-cover .role-line strong { color: var(--fg-primary); font-weight: 600; }
+
+.slide-cover .cover-footer {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.slide-cover .cover-footer .context strong { color: var(--fg-secondary); }
+
+/* ============================================================
+   SLIDE 02 — Big Idea / frase-âncora
+   ============================================================ */
+.slide-big-idea {
+  justify-content: center; align-items: flex-start;
+  position: relative;
+}
+
+.slide-big-idea h1 {
+  font-family: var(--font-display);
+  font-size: 200px;
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  max-width: 1700px;
+}
+
+.slide-big-idea h1 .pause {
+  display: block;
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.slide-big-idea .signature {
+  margin-top: 80px;
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ============================================================
+   SLIDE 03 — Quem sou eu (Identity)
+   ============================================================ */
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 96px;
+  margin-top: 32px;
+  flex: 1;
+}
+
+.identity-left h2 {
+  font-family: var(--font-display);
+  font-size: 92px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 56px;
+}
+
+.identity-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 28px;
+}
+
+.identity-list li {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--border);
+  align-items: baseline;
+}
+
+.identity-list li:last-child { border-bottom: none; }
+
+.identity-list .key {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.identity-list .value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--fg-primary);
+}
+
+.identity-list .value strong { font-weight: 500; }
+
+.identity-right {
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding-left: 64px;
+  border-left: 1px solid var(--border);
+}
+
+.identity-right h3 {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 40px;
+}
+
+.logo-grid {
+  display: flex; flex-direction: column;
+  gap: 28px;
+}
+
+.logo-grid .logo-line {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-grid .logo-line .meta {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+
+/* ============================================================
+   SLIDE 04/05 — What is ↔ What could be
+   ============================================================ */
+.contrast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  flex: 1;
+  margin-top: 16px;
+}
+
+.contrast-side {
+  display: flex; flex-direction: column;
+}
+
+.contrast-side .label {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 32px;
+}
+
+.contrast-side h2 {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 48px;
+}
+
+.contrast-side .points {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+.contrast-side .points li {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.45;
+  color: var(--fg-secondary);
+  padding-left: 28px;
+  position: relative;
+}
+
+.contrast-side .points li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 14px;
+  width: 12px; height: 1px;
+  background: var(--fg-muted);
+}
+
+.contrast-side.what-could .points li::before { background: var(--accent); width: 16px; }
+.contrast-side.what-could h2 { color: var(--fg-primary); }
+.contrast-side.what-could .label { color: var(--accent); }
+.contrast-side.what-is { opacity: 0.85; }
+
+/* Em slides separados (full single side) */
+.slide-single-side h2 {
+  font-family: var(--font-display);
+  font-size: 84px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+  max-width: 1400px;
+}
+
+.slide-single-side .label {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.slide-single-side.what-is .label { color: var(--fg-muted); }
+.slide-single-side.what-could .label { color: var(--accent); }
+
+.slide-single-side .points {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 56px;
+  margin-top: 24px;
+}
+
+.slide-single-side .points li {
+  font-family: var(--font-body);
+  font-size: 28px;
+  line-height: 1.4;
+  color: var(--fg-secondary);
+  padding-left: 32px;
+  position: relative;
+}
+
+.slide-single-side .points li strong { color: var(--fg-primary); font-weight: 500; }
+
+.slide-single-side .points li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 18px;
+  width: 18px; height: 2px;
+  background: var(--fg-muted);
+}
+
+.slide-single-side.what-could .points li::before { background: var(--accent); }
+
+/* ============================================================
+   SLIDE 06 — Trajetória timeline
+   ============================================================ */
+.timeline {
+  margin-top: 80px;
+  position: relative;
+  padding: 0 0 80px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.timeline-track {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 32px;
+  position: relative;
+}
+
+.timeline-step {
+  position: relative;
+  padding-bottom: 56px;
+}
+
+.timeline-step::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 0;
+  width: 12px; height: 12px;
+  background: var(--fg-primary);
+  border-radius: 50%;
+  border: 2px solid var(--bg-canvas);
+}
+
+.timeline-step.is-now::after { background: var(--accent); }
+
+.timeline-step .year {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  margin-bottom: 12px;
+}
+
+.timeline-step .role {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.timeline-step .org {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--fg-secondary);
+}
+
+/* ============================================================
+   SLIDES DE CASE — estrutura comum
+   ============================================================ */
+.slide-case .case-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 64px;
+}
+
+.slide-case .case-num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
+.slide-case .case-client {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-align: right;
+}
+
+.slide-case .case-title {
+  font-family: var(--font-display);
+  font-size: 104px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  margin-bottom: 40px;
+  max-width: 1500px;
+}
+
+.slide-case .case-thesis {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--fg-secondary);
+  max-width: 1300px;
+  padding-left: 40px;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 56px;
+}
+
+.slide-case .case-meta {
+  display: flex;
+  gap: 80px;
+  margin-top: auto;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.slide-case .case-meta .meta-item .label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+
+.slide-case .case-meta .meta-item .value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--fg-primary);
+}
+
+/* Case detalhe — decisões */
+.decisions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 32px;
+}
+
+.decision-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  border-radius: 4px;
+}
+
+.decision-card .dec-num {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.decision-card h4 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  margin-bottom: 12px;
+}
+
+.decision-card p {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--fg-secondary);
+}
+
+/* Outcome em destaque (count-up) */
+.outcome-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px;
+  margin-top: 56px;
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.outcome-cell {
+  text-align: left;
+}
+
+.outcome-cell .from-to {
+  display: flex; align-items: baseline; gap: 16px;
+  margin-bottom: 12px;
+}
+
+.outcome-cell .before {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--fg-muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.outcome-cell .arrow {
+  font-family: var(--font-body);
+  font-size: 28px;
+  color: var(--accent);
+}
+
+.outcome-cell .after {
+  font-family: var(--font-display);
+  font-size: 112px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  display: block;
+  margin: 8px 0 16px;
+}
+
+.outcome-cell .label {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-secondary);
+}
+
+/* Case dual (Sesc + Senac side-by-side) */
+.case-dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 32px;
+  flex: 1;
+}
+
+.case-dual .case-col {
+  display: flex; flex-direction: column;
+  padding: 48px 40px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.case-dual .case-col.active {
+  background: var(--bg-canvas);
+  border-color: var(--accent);
+}
+
+.case-dual h3 {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 24px;
+}
+
+.case-dual .col-eyebrow {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.case-dual .col-thesis {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--fg-secondary);
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.case-dual .col-points {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 18px;
+  margin-bottom: auto;
+}
+
+.case-dual .col-points li {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--fg-secondary);
+  padding-left: 24px;
+  position: relative;
+}
+
+.case-dual .col-points li::before {
+  content: '—';
+  position: absolute; left: 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.case-dual .col-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ============================================================
+   SLIDE — Princípios de liderança (4 quadrantes)
+   ============================================================ */
+.principles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 48px;
+  margin-top: 48px;
+  flex: 1;
+}
+
+.principle {
+  display: flex; flex-direction: column;
+  padding: 40px 32px 32px 40px;
+  position: relative;
+  border-top: 2px solid var(--border);
+}
+
+.principle.is-accent { border-top-color: var(--accent); }
+
+.principle .number {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.principle h3 {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  color: var(--fg-primary);
+}
+
+.principle p {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--fg-secondary);
+}
+
+/* ============================================================
+   SLIDE 06 — Neodent · A situação · Reframing block
+   ============================================================ */
+.reframing-block {
+  margin-top: 40px;
+  display: flex; flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.reframing-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  padding: 32px 40px;
+  align-items: center;
+  background: var(--bg-surface);
+}
+
+.reframing-row.is-after {
+  background: var(--accent-soft);
+  border-top: 1px solid var(--accent);
+}
+
+.reframing-row .ref-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  line-height: 1.4;
+}
+
+.reframing-row.is-after .ref-label { color: var(--accent); }
+
+.reframing-row .ref-content {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--fg-primary);
+}
+
+.reframing-row.is-after .ref-content {
+  font-weight: 500;
+  color: var(--fg-primary);
+}
+
+/* ============================================================
+   SLIDE 08 — Neodent · O resultado
+   ============================================================ */
+.result-hero {
+  display: flex; flex-direction: column;
+  margin-bottom: 56px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-hero .result-label {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.result-hero .result-title {
+  font-family: var(--font-display);
+  font-size: 96px;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg-primary);
+  margin-bottom: 24px;
+  max-width: 1500px;
+}
+
+.result-hero .result-caption {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1.45;
+  color: var(--fg-secondary);
+  max-width: 1200px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.result-cell {
+  padding: 24px 28px;
+  border-left: 2px solid var(--accent);
+  background: var(--bg-surface);
+}
+
+.result-cell .cell-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 12px;
+}
+
+.result-cell .cell-value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--fg-primary);
+}
+
+/* ============================================================
+   SLIDE 09 — Cultura · Pilares (Super App)
+   ============================================================ */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.pillar {
+  padding: 28px 32px;
+  background: var(--bg-surface);
+  border-top: 2px solid var(--accent);
+}
+
+.pillar .pillar-num {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.pillar h4 {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  margin-bottom: 8px;
+}
+
+.pillar p {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--fg-secondary);
+}
+
+/* ============================================================
+   SLIDE 11 — Evidência adicional (3 cases compactos)
+   ============================================================ */
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 40px;
+  flex: 1;
+}
+
+.evidence-card {
+  display: flex; flex-direction: column;
+  padding: 36px 32px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.evidence-card.is-now {
+  background: var(--bg-canvas);
+  border-color: var(--accent);
+}
+
+.evidence-card .ev-eyebrow {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 16px;
+}
+
+.evidence-card h3 {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--fg-primary);
+  margin-bottom: 24px;
+}
+
+.evidence-card .ev-big-number {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.evidence-card .ev-big-number .ev-unit {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+
+.evidence-card .ev-thesis {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--fg-secondary);
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  flex: 1;
+}
+
+.evidence-card .ev-meta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   SLIDE 12 — Como eu lidero + Fit (combinado)
+   ============================================================ */
+.leadership-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  margin-top: 24px;
+  flex: 1;
+}
+
+.leadership-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 24px;
+}
+
+.leadership-list li {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.leadership-list li:last-child { border-bottom: none; }
+
+.leadership-list .num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.leadership-list h4 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--fg-primary);
+  margin-bottom: 4px;
+}
+
+.leadership-list p {
+  font-family: var(--font-body);
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--fg-secondary);
+}
+
+.leadership-right {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 48px 0 48px 56px;
+  border-left: 1px solid var(--border);
+}
+
+.quote-block .quote-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+
+.quote-block .big-quote {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  margin-bottom: 32px;
+}
+
+.quote-block .quote-meta {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--fg-secondary);
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   SLIDE 13 — CTA + Fechamento (combinado)
+   ============================================================ */
+.final-layout {
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 32px;
+}
+
+.final-top h1 {
+  font-family: var(--font-display);
+  font-size: 124px;
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+}
+
+.final-top .invite-body {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--fg-secondary);
+  max-width: 1400px;
+}
+
+.final-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 64px;
+  align-items: end;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.anchor-final .anchor-pre {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 16px;
+}
+
+.anchor-final .anchor-quote {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--fg-primary);
+}
+
+/* ============================================================
+   SLIDE — Fit / O que eu trago (legacy, mantido por compat)
+   ============================================================ */
+.fit-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 96px;
+  flex: 1;
+  margin-top: 32px;
+}
+
+.fit-left h2 {
+  font-family: var(--font-display);
+  font-size: 88px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 56px;
+}
+
+.fit-pillars {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 36px;
+}
+
+.fit-pillars li {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--fg-secondary);
+  padding-left: 36px;
+  position: relative;
+}
+
+.fit-pillars li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 22px;
+  width: 22px; height: 2px;
+  background: var(--accent);
+}
+
+.fit-pillars li strong { color: var(--fg-primary); font-weight: 500; }
+.fit-pillars li .italic { color: var(--accent); }
+
+.fit-right {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding-left: 64px;
+  border-left: 1px solid var(--border);
+}
+
+.fit-right .quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1.4;
+  color: var(--fg-primary);
+  margin-bottom: 32px;
+}
+
+.fit-right .cite {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ============================================================
+   SLIDE — Edge / honesty
+   ============================================================ */
+.slide-edge {
+  justify-content: center;
+}
+
+.slide-edge .edge-content {
+  max-width: 1400px;
+}
+
+.slide-edge .edge-label {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+}
+
+.slide-edge .edge-quote {
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--fg-primary);
+  margin-bottom: 48px;
+}
+
+.slide-edge .edge-quote .italic { color: var(--accent); font-weight: 400; }
+
+.slide-edge .edge-body {
+  font-family: var(--font-body);
+  font-size: 26px;
+  line-height: 1.5;
+  color: var(--fg-secondary);
+  max-width: 1200px;
+}
+
+/* ============================================================
+   SLIDE — CTA / Convite ao diálogo
+   ============================================================ */
+.slide-cta {
+  justify-content: space-between;
+}
+
+.slide-cta h1 {
+  font-family: var(--font-display);
+  font-size: 144px;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  margin-bottom: 56px;
+}
+
+.slide-cta h1 .italic { color: var(--accent); }
+
+.slide-cta .invite-body {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--fg-secondary);
+  max-width: 1400px;
+  margin-bottom: 64px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.contact-card {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+
+.contact-card .label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.contact-card .value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--fg-primary);
+  word-break: break-word;
+}
+
+.contact-card .value a {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+}
+
+/* ============================================================
+   SLIDE FINAL — Obrigado
+   ============================================================ */
+.slide-end {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slide-end h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 220px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--fg-primary);
+  margin-bottom: 48px;
+}
+
+.slide-end .signature {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.slide-end .signature .accent-text { color: var(--accent); }
+
+/* ============================================================
+   CONTROLS — navegação
+   ============================================================ */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: oklch(15% 0.01 270 / 0.92);
+  border: 1px solid oklch(28% 0.01 250);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  color: oklch(95% 0.005 90);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(12px);
+}
+
+.stage:hover .controls,
+.controls:hover,
+.controls.show { opacity: 1; }
+
+.controls button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.controls button:hover { background: oklch(28% 0.01 250); }
+
+.controls .counter {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+}
+
+.controls .divider { width: 1px; height: 18px; background: oklch(28% 0.01 250); }
+
+.controls .keyhint {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(58% 0.01 270);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 99;
+  transition: width 0.35s var(--ease-out-expo);
+  box-shadow: 0 0 12px oklch(45% 0.15 155 / 0.5);
+}
+
+/* ============================================================
+   TRANSIÇÕES entre slides
+   ============================================================ */
+.slide.is-active .reveal {
+  animation: reveal-up 0.8s var(--ease-out-expo) both;
+}
+
+.slide.is-active .reveal-delay-1 { animation-delay: 0.1s; }
+.slide.is-active .reveal-delay-2 { animation-delay: 0.2s; }
+.slide.is-active .reveal-delay-3 { animation-delay: 0.3s; }
+.slide.is-active .reveal-delay-4 { animation-delay: 0.4s; }
+.slide.is-active .reveal-delay-5 { animation-delay: 0.5s; }
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   PRINT — exportação PDF (Ctrl/Cmd + P)
+   ============================================================ */
+@media print {
+  @page { size: 1920px 1080px; margin: 0; }
+  html, body { background: white; overflow: visible; height: auto; }
+  .stage { position: static; height: auto; display: block; }
+  .deck { width: 1920px; height: auto; box-shadow: none; transform: none !important; }
+  .controls, .progress { display: none !important; }
+  .slide {
+    display: flex !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    height: 1080px;
+    position: relative;
+  }
+  .slide:last-of-type { page-break-after: auto; }
+}
+
+/* ============================================================
+   RESPONSIVO (preview em telas menores)
+   ============================================================ */
+@media (max-width: 1023px) {
+  .controls { bottom: 8px; padding: 8px 14px; font-size: 12px; }
+  .controls .keyhint { display: none; }
+}

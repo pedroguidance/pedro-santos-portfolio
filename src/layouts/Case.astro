@@ -1,0 +1,280 @@
+---
+import Base from './Base.astro';
+import { site } from '~/lib/site-meta';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import CountUp from '~/components/CountUp.astro';
+import VideoCover from '~/components/VideoCover.astro';
+import AwardsGrid from '~/components/AwardsGrid.astro';
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+
+// Find next case for cross-link
+const allCases = await getCollection('cases', ({ data }) => data.featured);
+allCases.sort((a, b) => a.data.order - b.data.order);
+const currentIndex = allCases.findIndex(c => c.id === entry.id);
+const nextCase = allCases[(currentIndex + 1) % allCases.length];
+
+const description = data.heroOneLiner.slice(0, 158);
+---
+
+<Base
+  title={data.title}
+  description={description}
+  ogImage={data.coverImage ?? '/og-default.png'}
+>
+  <article class="case">
+    <div class="container">
+      <a href="/#cases" class="back-link">← Voltar para cases</a>
+
+      <div class="edge-marker"></div>
+
+      <header class="case-header">
+        <p class="meta">
+          {data.role} · {data.period} · {data.client}
+        </p>
+        <h1>{data.title}</h1>
+        <p class="lead">{data.heroOneLiner}</p>
+      </header>
+
+      {data.videoId ? (
+        <VideoCover
+          videoId={data.videoId}
+          title={`${data.title}. Campanha institucional ${data.client.split('/')[0].trim()}`}
+        />
+      ) : data.coverImage ? (
+        <figure class="hero-figure">
+          <img
+            src={data.coverImage}
+            alt={`${data.title}. Imagem principal`}
+            loading="eager"
+            fetchpriority="high"
+          />
+        </figure>
+      ) : null}
+
+      <blockquote class="pull-quote">
+        <p>{data.pullQuote}</p>
+      </blockquote>
+
+
+      {data.metrics && data.metrics.length > 0 && (
+        <section class="metrics" aria-label="Métricas de impacto">
+          {data.metrics.map(m => (
+            <div class="metric">
+              {m.from && <span class="metric-from">de {m.from}</span>}
+              <CountUp value={m.value} />
+              <span class="metric-label">{m.label}</span>
+            </div>
+          ))}
+        </section>
+      )}
+
+      <div class="prose case-body">
+        <Content />
+      </div>
+
+      {data.awards && data.awards.length > 0 && (
+        <div class="awards-wrap prose">
+          <AwardsGrid awards={data.awards} />
+        </div>
+      )}
+
+      <nav class="next-case" aria-label="Próximo case">
+        <p class="meta">Próximo case</p>
+        <a href={`/cases/${nextCase.data.slug}`}>
+          <h3>{nextCase.data.title}</h3>
+          <p>{nextCase.data.heroOneLiner}</p>
+        </a>
+      </nav>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .case {
+    padding-block: var(--space-2xl) var(--space-4xl);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    text-decoration: none;
+    margin-bottom: var(--space-xl);
+  }
+
+  .back-link:hover {
+    color: var(--fg-primary);
+  }
+
+  .case-header {
+    max-width: var(--max-prose);
+    margin-inline: auto;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .case-header .meta {
+    margin-bottom: var(--space-md);
+  }
+
+  .case-header h1 {
+    font-size: clamp(2.5rem, 4vw + 0.5rem, 3.5rem);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-figure {
+    max-width: var(--max-wide);
+    margin: var(--space-xl) auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-figure img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .pull-quote {
+    max-width: var(--max-prose);
+    margin: var(--space-2xl) auto;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-lg);
+    max-width: var(--max-wide);
+    margin: var(--space-2xl) auto;
+    padding-block: var(--space-xl);
+    border-block: 1px solid var(--border);
+  }
+
+  .metric {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  .metric-from {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .metric :global(.count-up) {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .metric-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+  }
+
+  .case-body :global(h2) {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .case-body :global(h3) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  /* Images inside case prose break out of the reading column
+     and stretch up to the "wide" container width */
+  .case-body :global(p:has(> img:only-child)) {
+    max-width: var(--max-wide);
+    width: 100%;
+    margin-block: var(--space-xl);
+  }
+
+  .case-body :global(p > img) {
+    display: block;
+    width: 100%;
+    max-width: var(--max-wide);
+    height: auto;
+    margin-inline: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg-surface);
+  }
+
+  /* Italic-only paragraphs immediately following an image
+     are styled as figure captions */
+  .case-body :global(p:has(> img:only-child) + p > em:only-child) {
+    display: block;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    text-align: center;
+    max-width: var(--max-wide);
+    margin-inline: auto;
+    line-height: 1.5;
+  }
+
+  .case-body :global(p:has(> img:only-child) + p) {
+    max-width: var(--max-wide);
+    margin-block: calc(var(--space-md) * -0.5) var(--space-xl);
+  }
+
+  .awards-wrap {
+    max-width: var(--max-wide);
+    margin: var(--space-2xl) auto;
+  }
+
+  .next-case {
+    max-width: var(--max-prose);
+    margin: var(--space-4xl) auto 0;
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border);
+  }
+
+  .next-case .meta {
+    margin-bottom: var(--space-md);
+  }
+
+  .next-case a {
+    text-decoration: none;
+    color: var(--fg-primary);
+    display: block;
+  }
+
+  .next-case a:hover h3 {
+    color: var(--accent);
+  }
+
+  .next-case h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 400;
+    margin-bottom: var(--space-2xs);
+    transition: color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .next-case p {
+    color: var(--fg-secondary);
+    max-width: none;
+  }
+</style>

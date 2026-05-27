@@ -1,0 +1,252 @@
+---
+import Base from '~/layouts/Base.astro';
+import LogoStrip from '~/components/LogoStrip.astro';
+import CaseCard from '~/components/CaseCard.astro';
+import { getCollection } from 'astro:content';
+import { footerLinks } from '~/lib/site-meta';
+
+export const prerender = true;
+
+const cases = await getCollection('cases', ({ data }) => data.featured);
+cases.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base>
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <p class="hero-eyebrow meta">Pedro Santos</p>
+
+      <h1 id="hero-heading" class="hero-headline">
+        Senior Product Designer.<br />
+        <em>Produto, operação, IA.</em>
+      </h1>
+
+      <p class="hero-subhead lead">
+        Atualmente <strong>Head of Design at Guidance</strong> e Lead UX
+        Consultant na Neodent (Straumann). Quase 10 anos em produto digital
+        passando por <strong>Itaú, Arezzo, Cultura Inglesa, Sesc</strong> e
+        <strong>Straumann</strong> (Neodent, app premiado globalmente em 2024).
+      </p>
+
+      <div class="hero-cta">
+        <a href="#cases" class="btn btn-primary">Ver cases</a>
+        <a href="/conversar" class="btn btn-ghost">Conversar</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <LogoStrip />
+  </div>
+
+  <section class="what" aria-labelledby="what-heading">
+    <div class="container prose">
+      <h2 id="what-heading">O que eu faço</h2>
+
+      <p>
+        Faço produto digital em escala. Do discovery até o lançamento, passando
+        por estratégia, design system e arquitetura de serviço. Atuo como IC
+        sênior em squad, como líder de time, ou como consultor estratégico
+        conforme o contexto pede.
+      </p>
+
+      <p>
+        Frequentemente opero como product manager também. Trabalho onde design
+        encontra operação: planejo, prioritizo, e ajudo a tomar a decisão de
+        quando <em>não</em> construir.
+      </p>
+
+      <p>
+        Hoje sou Head of Design at Guidance (Belo Horizonte) e Lead UX
+        Consultant na Neodent (Straumann Group LATAM). Faço MBA em Digital
+        Business na USP. Moro no Rio, trabalho remoto.
+      </p>
+
+      <p>
+        Os cases abaixo são os mais recentes e relevantes. Cada um é uma
+        decisão estratégica, não uma sequência de telas.
+      </p>
+    </div>
+  </section>
+
+  <section id="cases" class="cases-section" aria-labelledby="cases-heading">
+    <div class="container">
+      <h2 id="cases-heading">Cases</h2>
+
+      <div class="cases-grid">
+        {cases.map(entry => <CaseCard entry={entry} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-block" aria-labelledby="contact-heading">
+    <div class="container prose">
+      <h2 id="contact-heading">Conversar?</h2>
+      <p class="lead">
+        Aberto a posições de Senior Product Designer, Design Lead, Head ou
+        Director of Design, e consultoria estratégica.
+      </p>
+
+      <ul class="contact-list">
+        {footerLinks
+          .filter(l => l.label !== 'Decisões')
+          .map(link => (
+            <li>
+              <a
+                href={link.href}
+                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
+              >
+                {link.label} →
+              </a>
+            </li>
+          ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-4xl) var(--space-3xl);
+  }
+
+  .hero-eyebrow {
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-headline {
+    font-size: var(--text-display);
+    font-weight: 400;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    max-width: 20ch;
+    margin-bottom: var(--space-xl);
+    text-wrap: balance;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .hero-subhead {
+    max-width: var(--max-prose);
+    margin-bottom: var(--space-xl);
+    font-size: var(--text-md);
+  }
+
+  .hero-subhead strong {
+    color: var(--fg-primary);
+    font-weight: 600;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xs) var(--space-lg);
+    min-height: 2.75rem;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      background var(--dur-fast) var(--ease-out-quad),
+      color var(--dur-fast) var(--ease-out-quad),
+      border-color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    text-decoration: none;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    color: var(--on-accent);
+    text-decoration: none;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg-primary);
+    border: 1px solid var(--border-strong);
+    text-decoration: none;
+  }
+
+  .btn-ghost:hover {
+    background: var(--bg-surface);
+    border-color: var(--fg-primary);
+    color: var(--fg-primary);
+    text-decoration: none;
+  }
+
+  .what {
+    padding-block: var(--space-4xl) var(--space-2xl);
+  }
+
+  .what h2 {
+    margin-bottom: var(--space-xl);
+  }
+
+  .cases-section {
+    padding-block: var(--space-2xl) var(--space-4xl);
+  }
+
+  .cases-section h2 {
+    margin-bottom: var(--space-xl);
+  }
+
+  .cases-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .cases-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .contact-block {
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+
+  .contact-block h2 {
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-block .lead {
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin: 0;
+  }
+
+  .contact-list a {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--fg-primary);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .contact-list a:hover {
+    color: var(--accent);
+  }
+</style>

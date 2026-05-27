@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Permitir crawlers de IA (Pedro: rever esta decisão — autoria sua)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://pedrosantos.design/sitemap-index.xml

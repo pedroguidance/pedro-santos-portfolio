@@ -1,0 +1,37 @@
+{
+  "name": "pedro-santos-portfolio",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Portfolio of Pedro Santos — Head of Design at Guidance",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lh": "unlighthouse --site http://localhost:4321",
+    "format": "prettier --write \"src/**/*.{astro,ts,js,md,css}\"",
+    "lint": "eslint src --ext .ts,.astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/rss": "^4.0.7",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/vercel": "^8.2.11",
+    "@google/genai": "^2.6.0",
+    "astro": "^5.0.0",
+    "sharp": "^0.33.5",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "cross-env": "^10.1.0",
+    "lightningcss": "^1.32.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

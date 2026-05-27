@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Pedro Santos — Head of Design</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&display=swap');
+
+  @page {
+    size: A4;
+    margin: 16mm 18mm 14mm 18mm;
+  }
+
+  * { box-sizing: border-box; }
+
+  :root {
+    --ink: #0a0a0a;
+    --body: #1c1c1c;
+    --muted: #6a6a6a;
+    --faint: #b8b8b8;
+    --rule: #d8d4cc;
+    --accent: #4a3f2a;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: var(--body);
+    font-family: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ───────── HERO ───────── */
+  .hero {
+    margin: 0 0 18pt 0;
+  }
+  .name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    font-size: 48pt;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 0 0 8pt 0;
+  }
+  .tagline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 12pt;
+    line-height: 1.35;
+    color: var(--accent);
+    letter-spacing: -0.005em;
+    margin: 0 0 14pt 0;
+    max-width: 92%;
+  }
+  .contact-strip {
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.015em;
+    line-height: 1.7;
+    border-top: 0.5pt solid var(--rule);
+    border-bottom: 0.5pt solid var(--rule);
+    padding: 6pt 0;
+  }
+  .contact-strip span { white-space: nowrap; }
+  .contact-strip .dot { color: var(--faint); margin: 0 8pt; }
+
+  /* ───────── PITCH ───────── */
+  .pitch {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: var(--ink);
+    letter-spacing: -0.003em;
+    margin: 18pt 0 22pt 0;
+    max-width: 96%;
+  }
+  .pitch strong { font-weight: 600; color: var(--ink); }
+
+  /* ───────── SECTION ───────── */
+  .section {
+    margin: 0 0 22pt 0;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 0.5pt solid var(--rule);
+    padding-bottom: 5pt;
+    margin-bottom: 10pt;
+  }
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 8pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .section-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 8pt;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+
+  /* ───────── ENGAGEMENTS GRID ───────── */
+  .engagement {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16pt;
+    padding: 9pt 0;
+    border-bottom: 0.4pt dotted #e2dfd8;
+  }
+  .engagement:last-child { border-bottom: none; }
+  .engagement-main {
+    flex: 1;
+  }
+  .engagement-client {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5pt;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    margin: 0 0 3pt 0;
+    line-height: 1.2;
+  }
+  .engagement-client .role {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 9pt;
+    margin-left: 6pt;
+    letter-spacing: 0;
+  }
+  .engagement-outcome {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    color: var(--body);
+    margin: 0;
+    letter-spacing: -0.002em;
+  }
+  .engagement-outcome strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .engagement-date {
+    font-size: 8.5pt;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    text-align: right;
+    min-width: 70pt;
+  }
+
+  /* ───────── EXPERIENCE (compact) ───────── */
+  .role {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14pt;
+    padding: 7pt 0;
+    border-bottom: 0.4pt solid #efece5;
+  }
+  .role:last-child { border-bottom: none; }
+  .role-title {
+    flex: 0 0 auto;
+    width: 145pt;
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.003em;
+    line-height: 1.35;
+  }
+  .role-where {
+    flex: 1;
+    font-size: 9.5pt;
+    color: var(--body);
+    line-height: 1.4;
+  }
+  .role-where .company {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .role-where .detail {
+    color: var(--muted);
+    font-size: 9pt;
+  }
+  .role-date {
+    flex: 0 0 auto;
+    font-size: 8.5pt;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    text-align: right;
+    min-width: 80pt;
+  }
+
+  /* ───────── EDUCATION ───────── */
+  .edu {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14pt;
+    padding: 6pt 0;
+  }
+  .edu-main { flex: 1; }
+  .edu-degree {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 1pt 0;
+    letter-spacing: -0.003em;
+  }
+  .edu-school {
+    font-size: 9pt;
+    color: var(--muted);
+    margin: 0;
+  }
+  .edu-date {
+    font-size: 8.5pt;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  /* ───────── RECOGNITION ───────── */
+  .recognition {
+    font-family: 'Inter', sans-serif;
+    font-size: 10pt;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0;
+  }
+  .recognition .award-name {
+    font-weight: 600;
+    letter-spacing: -0.003em;
+  }
+  .recognition .award-detail {
+    font-size: 9pt;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ───────── CAPABILITY GRID ───────── */
+  .cap-grid {
+    column-count: 2;
+    column-gap: 24pt;
+    font-size: 9pt;
+    line-height: 1.7;
+    color: var(--body);
+  }
+  .cap-block {
+    break-inside: avoid;
+    margin-bottom: 8pt;
+  }
+  .cap-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 7.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-bottom: 2pt;
+  }
+  .cap-items {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* ───────── FOOTER NOTE ───────── */
+  .footer-note {
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+    font-size: 9pt;
+    line-height: 1.5;
+    color: var(--muted);
+    padding-top: 14pt;
+    border-top: 0.5pt solid var(--rule);
+    margin-top: 18pt;
+  }
+  .footer-note strong {
+    color: var(--ink);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  @media print {
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <h1 class="name">Pedro Santos</h1>
+    <p class="tagline">Head of Design — orquestro design, operação e IA em produto digital de escala enterprise.</p>
+    <div class="contact-strip">
+      <span>Rio de Janeiro · Remoto</span><span class="dot">·</span><span>+55 22 99967-5972</span><span class="dot">·</span><span>pedrosantosdesigner@outlook.com</span><span class="dot">·</span><span>linkedin.com/in/pedrosantosd</span><span class="dot">·</span><span>pedrosantos.framer.website</span>
+    </div>
+  </header>
+
+  <p class="pitch">
+    Quase <strong>10 anos</strong> liderando produto digital em escala enterprise no Brasil e LATAM. Hoje, <strong>Head of Design at Guidance</strong> e <strong>Lead UX Consultant na Neodent (Straumann Group)</strong>. Conduzo a prática de design da consultoria onde produto encontra operação e IA — discovery, design system, governança e roadmap. App Neodent LATAM <strong>premiado globalmente pelo Straumann Group</strong> em 2024. MBA Executivo em Digital Business pela USP.
+  </p>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-title">Experience</p>
+      <p class="section-meta">2018 — Presente</p>
+    </div>
+
+    <div class="role">
+      <p class="role-title">Head of Design</p>
+      <p class="role-where"><span class="company">Guidance</span> <span class="detail">· Prática de design + IA · Belo Horizonte (Remoto)</span></p>
+      <span class="role-date">Jul 2022 — Presente</span>
+    </div>
+
+    <div class="role">
+      <p class="role-title">Lead UX Consultant</p>
+      <p class="role-where"><span class="company">Neodent · Straumann Group LATAM</span> <span class="detail">· App profissional dental · Curitiba (Remoto)</span></p>
+      <span class="role-date">Out 2023 — Presente</span>
+    </div>
+
+    <div class="role">
+      <p class="role-title">Senior Product Designer</p>
+      <p class="role-where"><span class="company">Liqi Digital Assets</span> <span class="detail">· Tokenização de ativos corporativos · São Paulo (Remoto)</span></p>
+      <span class="role-date">Fev — Set 2022</span>
+    </div>
+
+    <div class="role">
+      <p class="role-title">Product Designer</p>
+      <p class="role-where"><span class="company">Grupo RV</span> <span class="detail">· Produtos B2B · Brasil</span></p>
+      <span class="role-date">Jan 2021 — Jan 2022</span>
+    </div>
+
+    <div class="role">
+      <p class="role-title">Product Designer</p>
+      <p class="role-where"><span class="company">1Doc</span> <span class="detail">· SaaS de gestão documental para governo · Florianópolis</span></p>
+      <span class="role-date">Jun 2019 — Jan 2021</span>
+    </div>
+
+    <div class="role">
+      <p class="role-title">UX/UI Designer</p>
+      <p class="role-where"><span class="company">Workana</span> <span class="detail">· Maior plataforma de freelancers da LATAM</span></p>
+      <span class="role-date">Nov 2018 — Jun 2019</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-title">Selected Engagements</p>
+      <p class="section-meta">2022 — 2026</p>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-main">
+        <p class="engagement-client">Neodent <span class="role">Straumann Group LATAM · Lead UX Consultant</span></p>
+        <p class="engagement-outcome">Lead UX da concepção ao lançamento do app B2B2C para o mercado LATAM. App lançado no INCongresse 2024 e <strong>vencedor do Straumann Group Global Marketing &amp; Commercial Excellence Awards</strong> — em um grupo presente em mais de 100 países.</p>
+      </div>
+      <span class="engagement-date">2023 — Presente</span>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-main">
+        <p class="engagement-client">Programa Feedback <span class="role">Guidance · Lead Designer + Service Design</span></p>
+        <p class="engagement-outcome">Engenharia organizacional para <strong>1.500 colaboradores em campo</strong>, em 12 mercados brasileiros — empresa de varejo bilionária. Diagnóstico AS IS / TO BE com aplicação de IA na operação.</p>
+      </div>
+      <span class="engagement-date">2024 — 2025</span>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-main">
+        <p class="engagement-client">Cultura Inglesa <span class="role">Guidance · Product Design Lead</span></p>
+        <p class="engagement-outcome">Redesign do app educacional. <strong>Uso ativo 20% → 60%</strong>. NPS 35 → 70+. Retenção mensal 85% → 92%.</p>
+      </div>
+      <span class="engagement-date">2025</span>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-main">
+        <p class="engagement-client">Sesc RJ <span class="role">Guidance · Lead Designer</span></p>
+        <p class="engagement-outcome"><strong>Primeira iniciativa digital concreta da instituição em uma década</strong> — 2.000 colaboradores internos, milhões de usuários finais.</p>
+      </div>
+      <span class="engagement-date">2025 — 2026</span>
+    </div>
+
+    <div class="engagement">
+      <div class="engagement-main">
+        <p class="engagement-client">Senac RJ <span class="role">Guidance · Lead Designer</span></p>
+        <p class="engagement-outcome">Reestruturação completa do ecossistema digital institucional. Em andamento.</p>
+      </div>
+      <span class="engagement-date">2026 — Presente</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-title">Formação</p>
+    </div>
+    <div class="edu">
+      <div class="edu-main">
+        <p class="edu-degree">MBA Executivo em Digital Business</p>
+        <p class="edu-school">Universidade de São Paulo (USP) · FIA Business School</p>
+      </div>
+      <span class="edu-date">2024 — 2026</span>
+    </div>
+    <div class="edu">
+      <div class="edu-main">
+        <p class="edu-degree">Bacharelado em Design de Interação</p>
+        <p class="edu-school">UNINASSAU · Centro Universitário Maurício de Nassau</p>
+      </div>
+      <span class="edu-date">2020 — 2023</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-title">Reconhecimento</p>
+    </div>
+    <p class="recognition">
+      <span class="award-name">Straumann Group Global Marketing &amp; Commercial Excellence Awards (2024).</span><br/>
+      <span class="award-detail">App Neodent LATAM — vencedor em categoria de excelência em grupo global presente em mais de 100 países.</span>
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <p class="section-title">Competências</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap-block">
+        <span class="cap-label">Design &amp; Produto</span>
+        <span class="cap-items">Product Design · Design System · Design Ops · Service Design · Discovery · Information Architecture · Product Strategy · Roadmap · OKRs · Acessibilidade WCAG</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">Liderança</span>
+        <span class="cap-items">Gestão de Time · Mentoria · Hiring · Governança de Qualidade · Stakeholder Management · Comunicação C-level</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">IA aplicada</span>
+        <span class="cap-items">Generative AI em fluxos de design · Orquestração de agentes · LLM em discovery · AI &amp; Data Strategy</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">Segmentos</span>
+        <span class="cap-items">B2B SaaS · Enterprise · Fintech · EdTech · HealthTech · Varejo · Setor Público</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">Marcas atendidas</span>
+        <span class="cap-items">Banco Itaú · Arezzo &amp; Co · Straumann Group · Cultura Inglesa · Sesc RJ · Senac RJ · 123milhas · Liqi Digital Assets</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">Ferramentas</span>
+        <span class="cap-items">Figma · FigJam · Adobe Creative Suite · Notion · Linear · Jira · Mixpanel · Amplitude · Hotjar</span>
+      </div>
+      <div class="cap-block">
+        <span class="cap-label">Idiomas</span>
+        <span class="cap-items">Português (Nativo) · Inglês (Intermediário) · Espanhol (Intermediário)</span>
+      </div>
+    </div>
+  </section>
+
+
+</body>
+</html>

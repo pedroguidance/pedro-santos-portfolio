@@ -1,0 +1,101 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'cases'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+---
+
+<article class="case-card">
+  <a href={`/cases/${data.slug}`} class="case-card-link">
+    <p class="meta">
+      {data.role} · {data.period}
+    </p>
+    <h3>{data.title}</h3>
+    <p class="case-card-line">{data.heroOneLiner}</p>
+    {data.award && (
+      <p class="case-card-award">
+        <span aria-hidden="true">✦</span> {data.award}
+      </p>
+    )}
+    <span class="case-card-cta" aria-hidden="true">
+      Ler caso completo →
+    </span>
+  </a>
+</article>
+
+<style>
+  .case-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition:
+      border-color var(--dur-base) var(--ease-out-quad),
+      transform var(--dur-base) var(--ease-out-quad),
+      background var(--dur-base) var(--ease-out-quad);
+  }
+
+  .case-card:hover,
+  .case-card:focus-within {
+    border-color: var(--border-strong);
+    background: var(--bg-surface);
+    transform: translateY(-2px);
+  }
+
+  .case-card-link {
+    display: block;
+    padding: var(--space-lg);
+    text-decoration: none;
+    color: var(--fg-primary);
+    height: 100%;
+  }
+
+  .case-card-link:hover,
+  .case-card-link:focus-visible {
+    color: var(--fg-primary);
+  }
+
+  .case-card .meta {
+    margin: 0 0 var(--space-md);
+    max-width: none;
+  }
+
+  .case-card h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.01em;
+  }
+
+  .case-card-line {
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+    margin-bottom: var(--space-md);
+    max-width: none;
+    line-height: var(--leading-body);
+  }
+
+  .case-card-award {
+    margin: var(--space-md) 0 var(--space-lg);
+    font-size: var(--text-xs);
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    max-width: none;
+  }
+
+  .case-card-cta {
+    display: inline-block;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--accent);
+    transition: transform var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .case-card:hover .case-card-cta {
+    transform: translateX(2px);
+  }
+</style>

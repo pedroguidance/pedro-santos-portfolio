@@ -1,0 +1,32 @@
+---
+import Base from '~/layouts/Base.astro';
+
+export const prerender = true;
+---
+
+<Base title="404. Página não encontrada" noIndex>
+  <section class="not-found">
+    <div class="container prose">
+      <p class="meta">404</p>
+      <h1>Essa página não existe.</h1>
+      <p class="lead">
+        Ou existiu e foi movida. De qualquer forma, dá pra voltar pra
+        <a href="/">home</a>, ler o
+        <a href="/sobre">sobre</a>, ou
+        <a href="/conversar">conversar comigo</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    padding-block: var(--space-4xl);
+    min-height: 60vh;
+  }
+
+  .not-found h1 {
+    font-size: clamp(2.5rem, 4vw + 0.5rem, 3.5rem);
+    margin-bottom: var(--space-xl);
+  }
+</style>

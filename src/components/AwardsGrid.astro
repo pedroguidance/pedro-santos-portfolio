@@ -1,0 +1,144 @@
+---
+interface Award {
+  label: string;
+  year?: string;
+  title: string;
+  description?: string;
+}
+
+interface Props {
+  awards: Award[];
+  heading?: string;
+}
+
+const { awards, heading = 'Reconhecimento institucional' } = Astro.props;
+---
+
+<section class="awards-section" aria-labelledby="awards-heading">
+  <h2 id="awards-heading" class="awards-heading">{heading}</h2>
+
+  <ul class="awards-grid">
+    {awards.map(award => (
+      <li class="award-card">
+        <div class="award-rule" aria-hidden="true"></div>
+        <div class="award-body">
+          <p class="award-meta">
+            <span class="award-label">{award.label}</span>
+            {award.year && (
+              <>
+                <span class="award-dot" aria-hidden="true">·</span>
+                <span class="award-year">{award.year}</span>
+              </>
+            )}
+          </p>
+          <h3 class="award-title">{award.title}</h3>
+          {award.description && (
+            <p class="award-description">{award.description}</p>
+          )}
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .awards-section {
+    margin-block: var(--space-2xl);
+  }
+
+  .awards-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .awards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 720px) {
+    .awards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg);
+    }
+  }
+
+  .award-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3px 1fr;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding-right: var(--space-md);
+    overflow: hidden;
+    transition:
+      border-color var(--dur-base) var(--ease-out-quad),
+      transform var(--dur-base) var(--ease-out-quad);
+  }
+
+  .award-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .award-rule {
+    background: var(--accent);
+    width: 3px;
+    margin-left: 0;
+  }
+
+  .award-body {
+    padding-block: var(--space-2xs);
+    min-width: 0;
+  }
+
+  .award-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin: 0 0 var(--space-2xs);
+    font-size: var(--text-xs);
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    max-width: none;
+  }
+
+  .award-dot {
+    color: var(--fg-muted);
+    font-weight: 400;
+  }
+
+  .award-year {
+    color: var(--fg-muted);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  .award-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-2xs);
+    color: var(--fg-primary);
+    text-wrap: balance;
+  }
+
+  .award-description {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.45;
+    color: var(--fg-secondary);
+    max-width: none;
+  }
+</style>

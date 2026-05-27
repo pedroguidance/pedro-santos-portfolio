@@ -1,0 +1,70 @@
+---
+interface Props {
+  value: string;
+}
+const { value } = Astro.props;
+---
+
+<span class="count-up" data-target={value}>{value}</span>
+
+<script>
+  const reduceMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches;
+
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    document.querySelectorAll<HTMLElement>('.count-up').forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  function animateCount(el: HTMLElement) {
+    const target = el.dataset.target ?? el.textContent ?? '';
+    const match = target.match(/^([^\d-]*)([-\d.,]+)(.*)$/);
+    if (!match) return;
+
+    const prefix = match[1] ?? '';
+    const numStr = match[2] ?? '';
+    const suffix = match[3] ?? '';
+    const isDecimal = numStr.includes('.') || numStr.includes(',');
+    const targetNum = parseFloat(numStr.replace(',', '.'));
+
+    if (isNaN(targetNum)) return;
+
+    const duration = 900;
+    const startTime = performance.now();
+
+    function frame(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = targetNum * eased;
+      const display = isDecimal
+        ? current.toFixed(1).replace('.', ',')
+        : Math.floor(current).toString();
+      el.textContent = `${prefix}${display}${suffix}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        el.textContent = target;
+      }
+    }
+
+    el.textContent = `${prefix}0${suffix}`;
+    requestAnimationFrame(frame);
+  }
+</script>

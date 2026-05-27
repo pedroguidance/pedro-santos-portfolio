@@ -1,0 +1,201 @@
+---
+interface Props {
+  videoId: string;
+  title: string;
+}
+
+const { videoId, title } = Astro.props;
+
+// YouTube embed params for cover-style autoplay:
+// autoplay=1     -> tries to play immediately
+// mute=1         -> required for autoplay to work in all browsers (Chrome/Safari policy)
+// loop=1         -> repeat
+// playlist={id}  -> required hack for loop to work on single videos
+// controls=0     -> hide controls
+// showinfo=0     -> hide title overlay
+// rel=0          -> don't show related videos at the end
+// iv_load_policy=3 -> hide video annotations
+// modestbranding=1 -> minimize YouTube branding
+// playsinline=1  -> iOS: play inline, not fullscreen
+const embedSrc =
+  `https://www.youtube-nocookie.com/embed/${videoId}` +
+  `?autoplay=1&mute=1&loop=1&playlist=${videoId}` +
+  `&controls=0&showinfo=0&rel=0&iv_load_policy=3` +
+  `&modestbranding=1&playsinline=1`;
+---
+
+<figure class="video-cover">
+  <div class="video-cover-frame">
+    <iframe
+      src={embedSrc}
+      title={title}
+      loading="eager"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      tabindex="-1"
+      aria-hidden="true"
+    ></iframe>
+    <button
+      type="button"
+      class="unmute-btn"
+      aria-label="Ativar som do vídeo"
+      data-state="muted"
+    >
+      <svg
+        class="icon-muted"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+      <svg
+        class="icon-unmuted"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+      <span class="unmute-label">Ativar som</span>
+    </button>
+  </div>
+</figure>
+
+<style>
+  .video-cover {
+    max-width: var(--max-wide);
+    margin: var(--space-xl) auto var(--space-2xl);
+  }
+
+  .video-cover-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .video-cover-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    /* scale slightly to crop out residual YouTube branding at edges */
+    transform: scale(1.02);
+    transform-origin: center;
+    pointer-events: none;
+  }
+
+  .unmute-btn {
+    position: absolute;
+    bottom: var(--space-md);
+    right: var(--space-md);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0.5rem 0.875rem;
+    min-height: 2.5rem;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out-quad),
+      transform var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .unmute-btn:hover,
+  .unmute-btn:focus-visible {
+    background: rgba(0, 0, 0, 0.75);
+    transform: translateY(-1px);
+  }
+
+  .unmute-btn .icon-unmuted {
+    display: none;
+  }
+
+  .unmute-btn[data-state='unmuted'] .icon-muted {
+    display: none;
+  }
+  .unmute-btn[data-state='unmuted'] .icon-unmuted {
+    display: block;
+  }
+
+  .unmute-btn[data-state='unmuted'] .unmute-label::before {
+    content: 'Som ativo';
+  }
+
+  .unmute-btn[data-state='unmuted'] .unmute-label {
+    visibility: hidden;
+    width: 0;
+    overflow: hidden;
+  }
+
+  @media (max-width: 480px) {
+    .unmute-label {
+      display: none;
+    }
+    .unmute-btn {
+      padding: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-cover-frame iframe {
+      /* Pause not directly controllable on YouTube iframe without API,
+         but we hide visual emphasis */
+      opacity: 0.95;
+    }
+  }
+</style>
+
+<script>
+  // Toggle unmute by re-injecting the iframe with mute=0
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.unmute-btn');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const frame = btn.parentElement;
+      if (!frame) return;
+      const iframe = frame.querySelector<HTMLIFrameElement>('iframe');
+      if (!iframe) return;
+
+      const isMuted = btn.dataset.state === 'muted';
+      const src = iframe.src;
+
+      if (isMuted) {
+        iframe.src = src.replace('mute=1', 'mute=0');
+        btn.dataset.state = 'unmuted';
+        btn.setAttribute('aria-label', 'Silenciar vídeo');
+      } else {
+        iframe.src = src.replace('mute=0', 'mute=1');
+        btn.dataset.state = 'muted';
+        btn.setAttribute('aria-label', 'Ativar som do vídeo');
+      }
+    });
+  });
+</script>

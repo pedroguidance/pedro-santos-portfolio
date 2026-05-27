@@ -1,0 +1,162 @@
+---
+slug: cultura-inglesa
+order: 3
+featured: true
+title: App Cultura Inglesa, do redesign à adoção
+client: Cultura Inglesa
+role: Product Designer
+period: 2025
+status: shipped
+heroOneLiner: "Redesign completo do app educacional da Cultura Inglesa. Uso ativo subiu de 20% para 60%, NPS de 35 para 70+, retenção de 85% para 92%."
+pullQuote: "Este projeto não foi sobre lançar um app. Foi sobre redesenhar o futuro digital de uma instituição educacional centenária."
+metrics:
+  - value: "60%"
+    from: "20%"
+    label: "Uso ativo"
+  - value: "70+"
+    from: "35"
+    label: "NPS"
+  - value: "92%"
+    from: "85%"
+    label: "Retenção"
+publishedAt: 2026-05-26
+---
+
+import IPhoneMockup from '~/components/IPhoneMockup.astro';
+import IPhoneSequence from '~/components/IPhoneSequence.astro';
+
+<div class="mockup-grid">
+  <IPhoneMockup
+    src="/cases/cultura-fit-lock.webp"
+    alt="iPhone lock screen com ícone do app Cultura Inglesa entre outros apps"
+    caption="Ponto de entrada. O app vive ao lado de WhatsApp e Classroom na home do aluno."
+    size="md"
+  />
+  <IPhoneMockup
+    src="/cases/cultura-fit-home.webp"
+    alt="Home do app Cultura Inglesa com saudação personalizada, banner Festa do Pijama, cards de frequência e boleto, navegação para Dia a Dia e Comunicados, e mural de notícias"
+    caption="Home do app. Um Super App educacional ancorado em três pilares."
+    size="md"
+  />
+</div>
+
+## A situação
+
+A Cultura Inglesa é uma das maiores redes de ensino de inglês do Brasil. Décadas de operação, centenas de unidades, milhões de alunos. O app que servia esses alunos em 2024 tinha baixa adoção entre alunos ativos, avaliações ruins nas lojas, e não refletia a experiência real do aluno em sala. Era um vestígio digital de uma operação que tinha evoluído sem ele.
+
+Cinco fricções principais identificadas na primeira semana:
+
+1. Dificuldade de login e acesso recorrente.
+2. Navegação confusa entre módulos.
+3. Falta de notificações relevantes (e excesso de notificações irrelevantes).
+4. Perda de histórico acadêmico ao atualizar.
+5. Fragmentação de canais. Aluno usava WhatsApp pra falar com secretaria, Classroom pra material, app pra cobrança, e nada se conversava.
+
+## O framing
+
+A pergunta inicial era "como melhorar o app?". Repropus para a liderança: **"que experiência digital uma instituição educacional centenária deveria estar entregando, e como o app é um pedaço dessa experiência, não a totalidade?"**
+
+A reframing posicionava o app como um nó dentro de um Super App educacional, com WhatsApp, Classroom, secretaria e financeiro tendo papéis definidos em vez de competindo.
+
+## Discovery
+
+Análise de **115 avaliações públicas do app** (App Store + Play Store) somada a **127 sugestões internas** vindas da rede de unidades. Síntese em 5 clusters de problema.
+
+Entrevistas com alunos de três níveis de aprendizado, coordenadores pedagógicos, e equipe de tecnologia e suporte da rede.
+
+![Spec do fluxo Aprender com decisões de filtro, tabs de mês e arquitetura de informação de cada card de aula, anotada diretamente no Figma](/cases/cultura-flow-dia-a-dia.webp)
+
+*Acima: spec do fluxo Aprender / Dia a dia, com decisões anotadas diretamente no design file. Cada callout marca uma regra de produto (tipos de conteúdo cadastráveis, lógica de filtros, comportamento default por matrícula).*
+
+## Estratégia
+
+**Super App educacional**, ancorado em três pilares:
+
+1. **Aprender:** material, conteúdo, exercícios.
+2. **Progredir:** histórico acadêmico, conquistas, próximos passos.
+3. **Resolver:** financeiro, secretaria, suporte.
+
+Cada pilar com responsabilidade clara, sem sobreposição. Os canais externos (WhatsApp, Classroom) viraram complementares, não concorrentes.
+
+### O pilar Aprender em uso
+
+<div style="display: flex; justify-content: center; margin: var(--space-2xl) auto; max-width: 360px;">
+  <IPhoneSequence
+    screens={[
+      {
+        src: '/cases/cultura-fit-home.webp',
+        alt: 'Home do app com Olá Letícia, banner Festa do Pijama, cards de frequência e boleto'
+      },
+      {
+        src: '/cases/cultura-fit-dia-a-dia.webp',
+        alt: 'Dia a dia listando aulas de Conversation 1B por data com badges de Lesson e Announcement'
+      },
+      {
+        src: '/cases/cultura-fit-aula.webp',
+        alt: 'Informação da aula com badge Lesson, Conversation 1B, Homework, Attendance e Content'
+      },
+    ]}
+    caption="Fluxo Aprender em navegação. Home → Dia a dia → Informação da aula. Cada tela troca a cada 3 segundos."
+    size="md"
+    duration={3000}
+  />
+</div>
+
+## Product direction
+
+Roadmap em **três fases**, decisão consciente de não entregar tudo na v1:
+
+- **Fase 1. Estabilizar:** resolver login, histórico, e notificação relevante.
+- **Fase 2. Consolidar:** trazer Aprender e Progredir pra paridade com o que aluno usava em outros canais.
+- **Fase 3. Expandir:** integrar Resolver e fechar o Super App.
+
+Cada fase mensurada antes de avançar pra próxima.
+
+![System map do app com fluxos de splash, onboarding, autenticação e variantes de estado, com mascote e múltiplas telas conectadas](/cases/cultura-flow-geral.webp)
+
+*Acima: system map completo da v1. Splash, onboarding, autenticação, recuperação de senha, estados de erro e variantes do fluxo de matrícula em paralelo. Mascote desenhado para humanizar momentos de espera e empty states.*
+
+## Multi-matrícula como decisão estrutural
+
+A Cultura Inglesa tem alunos que estudam em mais de uma unidade, em mais de um curso. O app teve que ser desenhado pra contas com **múltiplas matrículas ativas simultâneas**, sem confundir o aluno sobre qual contexto está vendo. Trabalhei um bottom sheet de seleção de matrícula que vira o switch contextual global do app, e que aparece consistentemente em qualquer tela onde o contexto importa.
+
+<div class="mockup-grid">
+  <IPhoneMockup
+    src="/cases/cultura-fit-matricula.webp"
+    alt="Bottom sheet Selecionar matrícula com duas opções: Curso Inglês Básico na Unidade Savassi e Curso Inglês Avançado na Unidade Pampulha"
+    caption="Bottom sheet de seleção de matrícula. Padrão repetido em qualquer ponto do app onde o contexto pode ser ambíguo."
+    size="md"
+  />
+</div>
+
+## Design system
+
+Construção de design system próprio do app, alinhado à identidade Cultura Inglesa institucional, com tokens digitais nativos (estados, motion, dark mode opcional). Tokens documentados para handoff ao time interno de tecnologia. Componentes base: badges (Lesson, Announcement, Assessment), cards de conteúdo, status de attendance, tabs de mês, bottom sheets de seleção, e o sistema de navegação inferior persistente.
+
+O design system vive em arquivo Figma próprio, separado do arquivo de produto. Essa separação foi proposital. Tokens, foundations e componentes evoluem em ciclo próprio, e o produto consome via library. Decisão de arquitetura que permite ao time interno de tecnologia trabalhar contra um único contrato visual sem retrabalho.
+
+![Fundações e tokens do design system Cultura Inglesa: paleta de cores, escala de spacing, e tokens semânticos](/cases/cultura-ds-tokens.webp)
+
+*Acima: fundações do design system. Tokens semânticos de cor, spacing, radius e elevation, documentados como contrato com o time de desenvolvimento.*
+
+![Sistema tipográfico do design system: hierarquia de estilos, anatomia da escala, e regras de aplicação](/cases/cultura-ds-typography.webp)
+
+*Acima: sistema tipográfico. Hierarquia de estilos definidos por uso (display, heading, body, label, caption), com anatomia da escala e regras de aplicação por contexto.*
+
+![Catálogo de componentes do design system: variantes, estados e composições](/cases/cultura-ds-components.webp)
+
+*Acima: catálogo de componentes. Cada componente catalogado com suas variantes, estados (default, hover, active, disabled) e regras de composição.*
+
+![Iteração visual do Mural de notícias com seis variantes de estado da mesma tela, mostrando comportamento com diferentes volumes de conteúdo e estados vazios](/cases/cultura-flow-mural.webp)
+
+*Acima: iteração do componente Mural de notícias aplicado em produto. Seis variantes mostrando comportamento com volumes diferentes de conteúdo, incluindo estado vazio e estados de loading. Cada variante teve sua decisão de spacing, hierarquia e empty state documentada.*
+
+## Reflection
+
+Este projeto me ensinou que designer sênior precisa saber matar feature. A versão inicial do plano tinha 14 jornadas; a v1 entregou 3. A pressão pra "fazer tudo" veio de todos os lados, e dizer não foi mais difícil que desenhar.
+
+A segunda lição: métricas funcionam quando você define o que medir **antes** de medir. As três métricas mostradas acima foram acordadas antes do lançamento, com baseline registrado. Sem essa disciplina, eu teria reportado o que parecesse bom em vez do que era certo.
+
+## Créditos
+
+Liderança Cultura Inglesa. Equipe interna de tecnologia que fez o handoff funcionar. Alunos e coordenadores que toparam ser entrevistados.

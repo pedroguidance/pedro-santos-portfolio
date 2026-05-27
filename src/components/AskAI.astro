@@ -1,0 +1,793 @@
+---
+/**
+ * AskAI — floating chat widget that answers questions about Pedro.
+ *
+ * Anchored bottom-center. Collapsed = pill button; expanded = chat panel.
+ * Talks to /api/chat which streams Claude Haiku 4.5 responses.
+ */
+---
+
+<div id="askai" class="askai" data-state="closed">
+  <button
+    type="button"
+    class="askai__trigger"
+    aria-expanded="false"
+    aria-controls="askai-panel"
+    data-askai-trigger
+  >
+    <span class="askai__trigger-dot" aria-hidden="true"></span>
+    <span class="askai__trigger-label">Pergunte sobre o Pedro</span>
+    <span class="askai__trigger-hint" aria-hidden="true">IA</span>
+  </button>
+
+  <section
+    id="askai-panel"
+    class="askai__panel"
+    role="dialog"
+    aria-labelledby="askai-title"
+    aria-modal="false"
+    hidden
+  >
+    <header class="askai__header">
+      <div class="askai__title-block">
+        <h2 id="askai-title" class="askai__title">Pergunte sobre o Pedro</h2>
+        <p class="askai__subtitle">
+          IA respondendo com base no currículo, cases e posicionamento dele.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="askai__close"
+        aria-label="Fechar chat"
+        data-askai-close
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="askai__transcript" data-askai-transcript role="log" aria-live="polite" aria-atomic="false">
+      <div class="askai__welcome" data-askai-welcome>
+        <p>
+          Posso responder sobre experiência, cases, abordagem e contato.
+          Algumas perguntas pra começar:
+        </p>
+        <ul class="askai__suggestions">
+          <li><button type="button" class="askai__suggestion" data-askai-suggestion>Que tipo de problema o Pedro lidera melhor hoje?</button></li>
+          <li><button type="button" class="askai__suggestion" data-askai-suggestion>Quais os cases mais relevantes da carreira dele?</button></li>
+          <li><button type="button" class="askai__suggestion" data-askai-suggestion>Como ele usa IA no trabalho de design?</button></li>
+          <li><button type="button" class="askai__suggestion" data-askai-suggestion>Como conversar ou contratar o Pedro?</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <form class="askai__form" data-askai-form>
+      <label class="visually-hidden" for="askai-input">Sua pergunta</label>
+      <textarea
+        id="askai-input"
+        class="askai__input"
+        name="question"
+        rows="1"
+        maxlength="2000"
+        placeholder="Escreva sua pergunta sobre o Pedro…"
+        autocomplete="off"
+        data-askai-input
+      ></textarea>
+      <button type="submit" class="askai__send" aria-label="Enviar pergunta" data-askai-send>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M4 12l16-8-6 16-2-7-8-1z" fill="currentColor"/>
+        </svg>
+      </button>
+    </form>
+
+    <footer class="askai__footer">
+      <span>Respostas geradas por IA — confirme detalhes importantes com o Pedro.</span>
+    </footer>
+  </section>
+</div>
+
+<style>
+  .askai {
+    position: fixed;
+    bottom: clamp(0.75rem, 2.5vw, 1.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    font-family: var(--font-body);
+    color: var(--fg-primary);
+    pointer-events: none;
+  }
+
+  .askai > * {
+    pointer-events: auto;
+  }
+
+  /* ---------- Trigger pill ---------- */
+  .askai__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.1rem;
+    background: var(--bg-canvas);
+    color: var(--fg-primary);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 8px 24px -8px rgba(0, 0, 0, 0.18);
+    transition:
+      transform var(--dur-fast) var(--ease-out-quad),
+      box-shadow var(--dur-fast) var(--ease-out-quad),
+      border-color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .askai__trigger:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 14px 30px -10px rgba(0, 0, 0, 0.22);
+  }
+
+  .askai__trigger:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  .askai__trigger-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 18%, transparent);
+    animation: askai-pulse 2.4s ease-in-out infinite;
+  }
+
+  .askai__trigger-hint {
+    font-size: var(--text-2xs);
+    letter-spacing: var(--tracking-meta);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--border);
+    margin-left: 0.1rem;
+  }
+
+  @keyframes askai-pulse {
+    0%, 100% { box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 18%, transparent); }
+    50%      { box-shadow: 0 0 0 7px color-mix(in oklch, var(--accent) 8%, transparent); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .askai__trigger-dot { animation: none; }
+    .askai__trigger { transition: none; }
+  }
+
+  /* ---------- Panel ---------- */
+  .askai__panel {
+    position: absolute;
+    bottom: calc(100% + 0.75rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    width: min(96vw, 28rem);
+    max-height: min(72vh, 36rem);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-canvas);
+    color: var(--fg-primary);
+    border: 1px solid var(--border-strong);
+    border-radius: 1rem;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 24px 56px -16px rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--dur-base) var(--ease-out-quad),
+      transform var(--dur-base) var(--ease-out-expo);
+  }
+
+  .askai[data-state='open'] .askai__panel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .askai[data-state='open'] .askai__trigger {
+    border-color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .askai__panel { transition: opacity var(--dur-fast) linear; transform: translateX(-50%); }
+    .askai[data-state='open'] .askai__panel { transform: translateX(-50%); }
+  }
+
+  .askai__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1rem 0.6rem 1.15rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .askai__title-block { min-width: 0; }
+
+  .askai__title {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 500;
+    margin: 0;
+    line-height: var(--leading-tight);
+  }
+
+  .askai__subtitle {
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    margin: 0.2rem 0 0;
+    line-height: var(--leading-tight);
+  }
+
+  .askai__close {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    color: var(--fg-secondary);
+    padding: 0.25rem;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .askai__close:hover { background: var(--bg-surface); color: var(--fg-primary); }
+  .askai__close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---------- Transcript ---------- */
+  .askai__transcript {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.85rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    scroll-behavior: smooth;
+  }
+
+  .askai__welcome {
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+    line-height: var(--leading-body);
+  }
+
+  .askai__welcome p { margin: 0 0 0.65rem; }
+
+  .askai__suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .askai__suggestion {
+    width: 100%;
+    text-align: left;
+    background: var(--bg-surface);
+    color: var(--fg-primary);
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    font: inherit;
+    font-size: var(--text-sm);
+    line-height: var(--leading-tight);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out-quad),
+      border-color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .askai__suggestion:hover {
+    background: var(--bg-surface-2);
+    border-color: var(--border-strong);
+  }
+
+  .askai__suggestion:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .askai__msg {
+    display: flex;
+    flex-direction: column;
+    max-width: 88%;
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+    gap: 0.2rem;
+  }
+
+  .askai__msg-label {
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-meta);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    padding: 0 0.3rem;
+  }
+
+  .askai__msg--user {
+    align-self: flex-end;
+    align-items: flex-end;
+  }
+
+  .askai__msg--user .askai__msg-bubble {
+    background: var(--accent);
+    color: var(--on-accent);
+    padding: 0.6rem 0.85rem;
+    border-radius: 1rem 1rem 0.25rem 1rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .askai__msg--ai {
+    align-self: flex-start;
+    align-items: flex-start;
+  }
+
+  .askai__msg--ai .askai__msg-label {
+    color: var(--accent);
+  }
+
+  .askai__msg--ai .askai__msg-bubble {
+    background: var(--bg-surface);
+    color: var(--fg-primary);
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem 1rem 1rem 0.25rem;
+    word-wrap: break-word;
+    min-height: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .askai__msg--ai .askai__msg-content p { margin: 0 0 0.55rem; }
+  .askai__msg--ai .askai__msg-content p:last-child { margin-bottom: 0; }
+  .askai__msg--ai .askai__msg-content ul,
+  .askai__msg--ai .askai__msg-content ol { margin: 0 0 0.55rem 1.1rem; padding: 0; }
+  .askai__msg--ai .askai__msg-content li { margin-bottom: 0.2rem; }
+  .askai__msg--ai .askai__msg-content code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-surface-2);
+    padding: 0.05em 0.3em;
+    border-radius: 0.25rem;
+  }
+  .askai__msg--ai .askai__msg-content a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-weight: 500;
+  }
+  .askai__msg--ai .askai__msg-content a:hover { color: var(--accent-hover); }
+  .askai__msg--ai .askai__msg-content:empty { display: none; }
+
+  .askai__msg--error {
+    background: color-mix(in oklch, var(--danger) 12%, var(--bg-surface));
+    border-color: color-mix(in oklch, var(--danger) 40%, var(--border));
+  }
+
+  .askai__typing {
+    display: inline-flex;
+    gap: 0.18rem;
+    padding: 0.15rem 0;
+  }
+
+  .askai__typing span {
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 50%;
+    background: var(--fg-muted);
+    animation: askai-typing 1.2s ease-in-out infinite;
+  }
+  .askai__typing span:nth-child(2) { animation-delay: 0.15s; }
+  .askai__typing span:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes askai-typing {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40%           { opacity: 1; transform: translateY(-2px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .askai__typing span { animation: none; opacity: 0.6; }
+  }
+
+  /* ---------- Form ---------- */
+  .askai__form {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem 0.65rem 1.15rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .askai__input {
+    flex: 1 1 auto;
+    resize: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg-primary);
+    font: inherit;
+    font-size: var(--text-sm);
+    line-height: var(--leading-body);
+    max-height: 6.5rem;
+    overflow-y: auto;
+    padding: 0.35rem 0;
+  }
+
+  .askai__input::placeholder { color: var(--fg-muted); }
+
+  .askai__send {
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 0.5rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      background var(--dur-fast) var(--ease-out-quad),
+      transform var(--dur-fast) var(--ease-out-quad),
+      opacity var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .askai__send:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .askai__send:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .askai__send:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .askai__footer {
+    padding: 0 1.15rem 0.7rem;
+    font-size: var(--text-2xs);
+    color: var(--fg-muted);
+    line-height: var(--leading-tight);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 30rem) {
+    .askai {
+      bottom: 0.6rem;
+      left: 0.6rem;
+      right: 0.6rem;
+      transform: none;
+    }
+    .askai__trigger {
+      width: 100%;
+      justify-content: center;
+    }
+    .askai__panel {
+      left: 0;
+      right: 0;
+      transform: translateY(8px);
+      width: 100%;
+      max-height: 80vh;
+    }
+    .askai[data-state='open'] .askai__panel {
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  type Role = 'user' | 'assistant';
+  interface Msg { role: Role; content: string; }
+
+  const root = document.getElementById('askai');
+  if (root) {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-askai-trigger]')!;
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-askai-close]')!;
+    const panel = root.querySelector<HTMLElement>('#askai-panel')!;
+    const transcript = root.querySelector<HTMLElement>('[data-askai-transcript]')!;
+    const welcome = root.querySelector<HTMLElement>('[data-askai-welcome]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-askai-form]')!;
+    const input = root.querySelector<HTMLTextAreaElement>('[data-askai-input]')!;
+    const sendBtn = root.querySelector<HTMLButtonElement>('[data-askai-send]')!;
+
+    const history: Msg[] = [];
+    let busy = false;
+    let activeController: AbortController | null = null;
+
+    function setState(state: 'open' | 'closed') {
+      root!.dataset.state = state;
+      trigger.setAttribute('aria-expanded', state === 'open' ? 'true' : 'false');
+      if (state === 'open') {
+        panel.hidden = false;
+        requestAnimationFrame(() => input.focus());
+      } else {
+        // Allow exit transition before hiding from AT
+        setTimeout(() => { if (root!.dataset.state === 'closed') panel.hidden = true; }, 220);
+      }
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /** Minimal safe markdown → HTML: bold/italic/code/links/paragraphs/bullets. */
+    function renderMarkdown(text: string): string {
+      const escaped = escapeHtml(text.trim());
+      const blocks = escaped.split(/\n{2,}/);
+      return blocks
+        .map((block) => {
+          // Bulleted list
+          if (/^(\s*[-*]\s+).+/m.test(block) && block.split('\n').every((l) => /^\s*[-*]\s+/.test(l) || l.trim() === '')) {
+            const items = block
+              .split('\n')
+              .filter((l) => l.trim() !== '')
+              .map((l) => l.replace(/^\s*[-*]\s+/, ''))
+              .map(inline)
+              .map((html) => `<li>${html}</li>`)
+              .join('');
+            return `<ul>${items}</ul>`;
+          }
+          // Paragraph (preserve single linebreaks as <br>)
+          const lines = block.split('\n').map(inline).join('<br>');
+          return `<p>${lines}</p>`;
+        })
+        .join('');
+    }
+
+    /** Site-internal paths the AI is allowed to link to (auto-prefix if relative). */
+    const KNOWN_PATHS = /^(cases\/[a-z0-9-]+|sobre|conversar|decisoes)$/i;
+
+    function inline(s: string): string {
+      // Markdown links [text](url) — normalize bare site paths and block dangerous schemes
+      s = s.replace(/\[([^\]]+)\]\(([^\s)]+)\)/g, (_, label, urlRaw) => {
+        let url = String(urlRaw).trim();
+
+        // Block dangerous schemes
+        if (/^(javascript|data|vbscript|file):/i.test(url)) {
+          return label;
+        }
+
+        // Strip trailing .md / .mdx / .html that the model sometimes leaks
+        url = url.replace(/\.(mdx?|html?)$/i, '');
+
+        // Auto-prefix bare site paths: cases/neodent → /cases/neodent
+        if (KNOWN_PATHS.test(url)) {
+          url = '/' + url;
+        }
+
+        // Only accept safe shapes after normalization
+        const isSafe =
+          /^https?:\/\//i.test(url) ||
+          /^mailto:/i.test(url) ||
+          /^tel:/i.test(url) ||
+          url.startsWith('/') ||
+          url.startsWith('#');
+        if (!isSafe) return label;
+
+        const safeUrl = url.replace(/"/g, '%22');
+        const external = /^https?:\/\//i.test(safeUrl);
+        const target = external ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return `<a href="${safeUrl}"${target}>${label}</a>`;
+      });
+      // bold **x**
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      // italic *x*  (avoid clashing with **)
+      s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+      // inline code `x`
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return s;
+    }
+
+    function autoResize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 104) + 'px';
+    }
+
+    function scrollToEnd() {
+      transcript.scrollTop = transcript.scrollHeight;
+    }
+
+    function addUserMessage(text: string) {
+      welcome.style.display = 'none';
+      const el = document.createElement('div');
+      el.className = 'askai__msg askai__msg--user';
+      el.innerHTML = `
+        <span class="askai__msg-label">Você</span>
+        <span class="askai__msg-bubble"></span>
+      `;
+      el.querySelector('.askai__msg-bubble')!.textContent = text;
+      transcript.appendChild(el);
+      scrollToEnd();
+    }
+
+    function addAssistantBubble(): { update: (text: string) => void; markError: () => void } {
+      const el = document.createElement('div');
+      el.className = 'askai__msg askai__msg--ai';
+      el.innerHTML = `
+        <span class="askai__msg-label">Pedro AI</span>
+        <div class="askai__msg-bubble">
+          <span class="askai__typing" data-askai-typing>
+            <span></span><span></span><span></span>
+          </span>
+          <div class="askai__msg-content" data-askai-content></div>
+        </div>
+      `;
+      transcript.appendChild(el);
+      scrollToEnd();
+
+      const typingEl = el.querySelector<HTMLElement>('[data-askai-typing]')!;
+      const contentEl = el.querySelector<HTMLElement>('[data-askai-content]')!;
+
+      let current = '';
+      return {
+        update(text: string) {
+          current = text;
+          if (text.length > 0 && typingEl.style.display !== 'none') {
+            typingEl.style.display = 'none';
+          }
+          contentEl.innerHTML = renderMarkdown(current);
+          scrollToEnd();
+        },
+        markError() {
+          el.querySelector('.askai__msg-bubble')!.classList.add('askai__msg--error');
+          typingEl.style.display = 'none';
+          if (!current) {
+            contentEl.textContent =
+              'Não consegui responder agora. Tenta de novo em alguns segundos, ou fala direto com o Pedro pelo rodapé.';
+          }
+        },
+      };
+    }
+
+    async function send(text: string) {
+      if (busy) return;
+      const trimmed = text.trim();
+      if (!trimmed) return;
+
+      busy = true;
+      sendBtn.disabled = true;
+      input.disabled = true;
+
+      addUserMessage(trimmed);
+      history.push({ role: 'user', content: trimmed });
+      input.value = '';
+      autoResize();
+
+      const bubble = addAssistantBubble();
+      activeController = new AbortController();
+
+      try {
+        const resp = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ messages: history }),
+          signal: activeController.signal,
+        });
+
+        if (!resp.ok) {
+          let msg = 'Não consegui responder agora.';
+          try {
+            const data = await resp.json();
+            if (data?.message) msg = data.message;
+            else if (resp.status === 429) msg = 'Muitas perguntas seguidas. Aguarda um pouco.';
+            else if (resp.status === 503) msg = 'Chat indisponível no momento — fala direto com o Pedro pelo rodapé.';
+          } catch {}
+          bubble.update(msg);
+          bubble.markError();
+          history.pop();
+          return;
+        }
+
+        if (!resp.body) {
+          bubble.update('Resposta vazia. Tenta de novo.');
+          bubble.markError();
+          history.pop();
+          return;
+        }
+
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let acc = '';
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          acc += decoder.decode(value, { stream: true });
+          bubble.update(acc);
+        }
+        acc += decoder.decode();
+        bubble.update(acc);
+
+        history.push({ role: 'assistant', content: acc });
+      } catch (err) {
+        if ((err as { name?: string })?.name === 'AbortError') {
+          bubble.update('Resposta interrompida.');
+        } else {
+          console.error('[AskAI]', err);
+          bubble.markError();
+        }
+        history.pop();
+      } finally {
+        busy = false;
+        sendBtn.disabled = false;
+        input.disabled = false;
+        activeController = null;
+        input.focus();
+      }
+    }
+
+    // --- Events ---
+    trigger.addEventListener('click', () => {
+      setState(root!.dataset.state === 'open' ? 'closed' : 'open');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      activeController?.abort();
+      setState('closed');
+      trigger.focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && root!.dataset.state === 'open') {
+        activeController?.abort();
+        setState('closed');
+        trigger.focus();
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      send(input.value);
+    });
+
+    input.addEventListener('input', autoResize);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        send(input.value);
+      }
+    });
+
+    transcript.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-askai-suggestion]');
+      if (target) send(target.textContent ?? '');
+    });
+  }
+</script>

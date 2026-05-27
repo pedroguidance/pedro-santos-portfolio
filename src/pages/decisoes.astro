@@ -1,0 +1,96 @@
+---
+import Base from '~/layouts/Base.astro';
+
+export const prerender = true;
+
+const decisions = [
+  {
+    date: '2026-05-26',
+    title: 'Por que verde-tinta e não azul como cor acento',
+    body: `90% dos portfolios de designer brasileiro usam variação de azul. Azul é leitura segura mas commodity, não contribui pro positioning de diferenciação. Verde-tinta, referência sutil a tinta de caneta-tinteiro, é editorial, raro em portfolios, e estabelece tom "operador maduro" sem custar legibilidade.`,
+  },
+  {
+    date: '2026-05-26',
+    title: 'Por que light primary e não dark',
+    body: `Portfolios de designer brasileiros tendem a default dark, pelo "look moderno" e pra esconder imperfeição visual. Light força os elementos a se sustentarem na tipografia e no espaçamento. É leitura de confiança ("não estou escondendo nada no escuro"). Dark fica disponível pra quem quer.`,
+  },
+  {
+    date: '2026-05-26',
+    title: 'Por que Astro e não Next.js',
+    body: `Site content-heavy com poucas interações. Astro ships zero JavaScript por padrão; hidrata só o que pedirmos. Lighthouse performance é virtualmente gratuito. Next.js entregaria as mesmas funcionalidades com mais complexidade e mais JS baseline. Markdown com Content Collections do Astro casa com o workflow "adicionar case = criar .md novo".`,
+  },
+  {
+    date: '2026-05-26',
+    title: 'Por que apenas 5 cases',
+    body: `Editorial judgment > completeness. Workana, 1Doc, Grupo RV são da fase de formação, ficam no LinkedIn como histórico. Liqi (cripto, 8 meses) é polarizante e curto. Os 5 escolhidos cobrem: enterprise global premiado (Neodent), ops em escala (Feedback), métricas concretas (Cultura), institucional (Sesc), trabalho atual (Senac).`,
+  },
+  {
+    date: '2026-05-26',
+    title: 'Por que count-up animado nos outcomes',
+    body: `Outcomes são protagonistas dos cases. Count-up cria peso visual proporcional à importância. O olho do leitor é convidado a parar e absorver o número. Não é decoração, é hierarquia de atenção feita com motion. Reduced-motion fallback é o número estático.`,
+  },
+];
+---
+
+<Base
+  title="Decisões"
+  description="Decisões de design tomadas durante a construção deste portfólio. Documentadas com data, raciocínio e trade-off."
+>
+  <section class="decisions-page">
+    <div class="container prose">
+      <p class="meta">Decisões</p>
+      <h1>Decisões.</h1>
+
+      <p class="lead">
+        Cada decisão de design tomada durante a construção deste portfólio.
+        Com data, raciocínio, e trade-off nomeado. Página viva, atualizada
+        quando uma nova decisão é tomada.
+      </p>
+
+      <ol class="decisions-list">
+        {decisions.map(d => (
+          <li id={d.date}>
+            <p class="meta">{d.date}</p>
+            <h2>{d.title}</h2>
+            <p>{d.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .decisions-page {
+    padding-block: var(--space-3xl) var(--space-4xl);
+  }
+
+  .decisions-page h1 {
+    font-size: clamp(2.5rem, 4vw + 0.5rem, 3.5rem);
+    margin-bottom: var(--space-xl);
+  }
+
+  .decisions-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2xl) 0 0;
+    display: grid;
+    gap: var(--space-2xl);
+  }
+
+  .decisions-list li {
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border);
+  }
+
+  .decisions-list .meta {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .decisions-list h2 {
+    font-size: var(--text-xl);
+    font-family: var(--font-display);
+    font-weight: 400;
+    margin-bottom: var(--space-md);
+  }
+</style>

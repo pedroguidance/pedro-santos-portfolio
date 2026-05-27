@@ -1,0 +1,99 @@
+---
+import Base from '~/layouts/Base.astro';
+import { site } from '~/lib/site-meta';
+
+export const prerender = true;
+---
+
+<Base
+  title="Conversar"
+  description="Aberto a Head/Director of Design, Design Lead, ou consultoria estratégica. Email, WhatsApp, LinkedIn."
+>
+  <section class="contact-page">
+    <div class="container prose">
+      <p class="meta">Conversar</p>
+      <h1>Vamos falar.</h1>
+
+      <p class="lead">Respondo em até 48h em qualquer canal.</p>
+
+      <ul class="contact-channels">
+        <li>
+          <p class="meta">Email</p>
+          <a href={`mailto:${site.author.email}`}>{site.author.email}</a>
+        </li>
+        <li>
+          <p class="meta">WhatsApp</p>
+          <a
+            href={`https://wa.me/${site.author.whatsapp}`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            +55 22 99967-5972 →
+          </a>
+
+        </li>
+        <li>
+          <p class="meta">LinkedIn</p>
+          <a href={site.author.linkedin} rel="noopener noreferrer" target="_blank">
+            linkedin.com/in/pedrosantosd →
+          </a>
+        </li>
+        <li>
+          <p class="meta">Currículo</p>
+          <a href={site.author.cv} rel="noopener noreferrer" target="_blank">
+            Baixar CV (Google Drive) →
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-page {
+    padding-block: var(--space-3xl) var(--space-4xl);
+  }
+
+  .contact-page h1 {
+    font-size: clamp(2.5rem, 4vw + 0.5rem, 3.5rem);
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact-channels {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2xl) 0;
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .contact-channels li {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-md);
+  }
+
+  .contact-channels .meta {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .contact-channels a {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--fg-primary);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .contact-channels a:hover {
+    color: var(--accent);
+  }
+
+  .contact-page h2 {
+    font-size: var(--text-xl);
+    font-family: var(--font-display);
+    font-weight: 400;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+</style>

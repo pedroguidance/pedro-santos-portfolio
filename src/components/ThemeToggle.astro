@@ -1,0 +1,119 @@
+---
+// Theme toggle — vanilla JS, ~600 bytes, runs in island mode
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle"
+  type="button"
+  aria-label="Alternar tema claro/escuro"
+>
+  <svg
+    class="sun"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+    ></path>
+  </svg>
+  <svg
+    class="moon"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 4px;
+    color: var(--fg-secondary);
+    transition:
+      color var(--dur-fast) var(--ease-out-quad),
+      background var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .theme-toggle:hover {
+    color: var(--fg-primary);
+    background: var(--bg-surface);
+  }
+
+  .theme-toggle .sun,
+  .theme-toggle .moon {
+    transition: opacity var(--dur-base) var(--ease-out-quad);
+  }
+
+  .theme-toggle .moon {
+    position: absolute;
+    opacity: 0;
+  }
+
+  :root[data-theme='dark'] .theme-toggle .sun,
+  :root:not([data-theme='light']) .theme-toggle .sun {
+    opacity: 0;
+  }
+
+  :root[data-theme='dark'] .theme-toggle .moon,
+  :root:not([data-theme='light']) .theme-toggle .moon {
+    opacity: 1;
+    position: absolute;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme='dark']) .theme-toggle .sun {
+      opacity: 1;
+      position: relative;
+    }
+    :root:not([data-theme='dark']) .theme-toggle .moon {
+      opacity: 0;
+      position: absolute;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      const systemPrefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+      ).matches;
+
+      let next: 'light' | 'dark';
+      if (current === 'dark') next = 'light';
+      else if (current === 'light') next = 'dark';
+      else next = systemPrefersDark ? 'light' : 'dark';
+
+      root.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem('theme', next);
+      } catch (e) {
+        /* ignore */
+      }
+    });
+  }
+</script>

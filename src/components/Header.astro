@@ -1,0 +1,109 @@
+---
+import { nav } from '~/lib/site-meta';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label="Pedro Santos. Home">
+      <span class="brand-mark" aria-hidden="true">PS</span>
+      <span class="brand-name">Pedro Santos</span>
+    </a>
+
+    <nav aria-label="Navegação principal">
+      <ul class="nav-list">
+        {nav.map(item => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in oklch, var(--bg-canvas) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-base) var(--ease-out-quad);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    height: var(--header-height);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--fg-primary);
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 500;
+  }
+
+  .brand:hover {
+    color: var(--fg-primary);
+  }
+
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .brand-name {
+      display: inline;
+    }
+  }
+
+  .nav-list {
+    display: flex;
+    gap: var(--space-lg);
+    margin: 0;
+  }
+
+  .nav-list a {
+    color: var(--fg-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--dur-fast) var(--ease-out-quad);
+  }
+
+  .nav-list a:hover,
+  .nav-list a[aria-current='page'] {
+    color: var(--fg-primary);
+  }
+
+  @media (max-width: 480px) {
+    .nav-list {
+      gap: var(--space-md);
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+---
+const logos = [
+  { name: 'Guidance', label: 'Guidance' },
+  { name: 'Straumann / Neodent', label: 'Straumann' },
+  { name: 'Cultura Inglesa', label: 'Cultura Inglesa' },
+  { name: 'Sesc RJ', label: 'Sesc RJ' },
+  { name: 'Arezzo & Co', label: 'Arezzo & Co' },
+];
+---
+
+<section class="logo-strip" aria-label="Marcas com quem trabalhei">
+  <ul class="logo-strip-list">
+    {logos.map(logo => (
+      <li>
+        <span class="logo-text">{logo.label}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="logo-caption">
+    Marcas com quem trabalhei nos últimos 10 anos.
+  </p>
+</section>
+
+<style>
+  .logo-strip {
+    padding-block: var(--space-xl);
+    border-block: 1px solid var(--border);
+  }
+
+  .logo-strip-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xl);
+    margin: 0;
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--fg-secondary);
+    letter-spacing: -0.01em;
+  }
+
+  .logo-caption {
+    margin-top: var(--space-md);
+    margin-bottom: 0;
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    letter-spacing: 0.02em;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .logo-strip-list {
+      justify-content: center;
+      gap: var(--space-md) var(--space-lg);
+    }
+    .logo-text {
+      font-size: var(--text-sm);
+    }
+  }
+
+  /*
+   * Pedro: quando tiver logos SVG dos clientes, substituir o <span>
+   * por <img src="/logos/guidance.svg" alt="Guidance" />. Manter logos
+   * em SVG inline ou /public/logos/ + currentColor pra adaptar ao tema.
+   */
+</style>

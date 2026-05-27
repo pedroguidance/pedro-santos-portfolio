@@ -1,0 +1,164 @@
+---
+interface Props {
+  videoId: string;
+  title: string;
+  caption?: string;
+}
+
+const { videoId, title, caption } = Astro.props;
+const thumbUrl = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+---
+
+<figure class="yt-lite-figure">
+  <button
+    class="yt-lite"
+    data-video-id={videoId}
+    data-title={title}
+    aria-label={`Assistir vídeo: ${title}`}
+    style={`background-image: url('${thumbUrl}')`}
+    type="button"
+  >
+    <span class="yt-play" aria-hidden="true">
+      <svg viewBox="0 0 68 48" width="68" height="48">
+        <path
+          d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z"
+          fill="currentColor"
+        ></path>
+        <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+      </svg>
+    </span>
+    <span class="yt-label">Assistir campanha</span>
+  </button>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .yt-lite-figure {
+    max-width: var(--max-wide);
+    margin: var(--space-xl) auto;
+  }
+
+  .yt-lite {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--bg-surface-2);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    transition:
+      transform var(--dur-base) var(--ease-out-quad),
+      border-color var(--dur-base) var(--ease-out-quad);
+  }
+
+  .yt-lite::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+    transition: opacity var(--dur-base) var(--ease-out-quad);
+  }
+
+  .yt-lite:hover,
+  .yt-lite:focus-visible {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .yt-lite:hover .yt-play,
+  .yt-lite:focus-visible .yt-play {
+    color: #ff0000;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  .yt-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(0, 0, 0, 0.65);
+    transition:
+      color var(--dur-base) var(--ease-out-quad),
+      transform var(--dur-base) var(--ease-out-quad);
+  }
+
+  .yt-play svg {
+    display: block;
+  }
+
+  .yt-label {
+    position: absolute;
+    bottom: var(--space-md);
+    left: var(--space-md);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    letter-spacing: 0.02em;
+  }
+
+  figcaption {
+    margin-top: var(--space-sm);
+    font-size: var(--text-xs);
+    color: var(--fg-muted);
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  /* When activated, the button is replaced by an iframe */
+  .yt-lite.activated {
+    cursor: default;
+  }
+  .yt-lite.activated::before,
+  .yt-lite.activated .yt-play,
+  .yt-lite.activated .yt-label {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('click', e => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.yt-lite');
+    if (!btn || btn.classList.contains('activated')) return;
+
+    const id = btn.dataset.videoId;
+    const title = btn.dataset.title ?? '';
+    if (!id) return;
+
+    btn.classList.add('activated');
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    const autoplay = reduceMotion ? 0 : 1;
+
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute(
+      'src',
+      `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay}&rel=0&modestbranding=1`,
+    );
+    iframe.setAttribute('title', title);
+    iframe.setAttribute(
+      'allow',
+      'accelerometer; encrypted-media; gyroscope; picture-in-picture',
+    );
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.style.position = 'absolute';
+    iframe.style.inset = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = '0';
+    btn.appendChild(iframe);
+  });
+</script>

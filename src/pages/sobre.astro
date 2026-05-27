@@ -1,0 +1,192 @@
+---
+import Base from '~/layouts/Base.astro';
+
+export const prerender = true;
+---
+
+<Base
+  title="Sobre"
+  description="Designer, líder e operador. Head of Design at Guidance. MBA Digital Business USP. Rio de Janeiro."
+>
+  <section class="about-page">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-content prose">
+          <p class="meta">Sobre</p>
+          <h1>Pedro Santos</h1>
+
+          <p class="lead">
+            Sou Pedro. Trabalho com produto digital há quase 10 anos. Atualmente
+            Head of Design at Guidance e Lead UX Consultant na Neodent
+            (Straumann Group). Atuo onde produto, operação e IA se encontram.
+            É onde mais aprendi, e é onde mais entrego.
+          </p>
+
+          <h2>Origem</h2>
+          <p>
+            Comecei em design em 2018, no Workana, fazendo UX/UI pra uma
+            plataforma usada por freelancers em toda a América Latina.
+            Aprendi cedo que produto digital não é arquivo de Figma. É
+            decisão tomada sob pressão de prazo, budget e desconhecimento.
+            Os primeiros anos foram em produtos B2B menos visíveis (1Doc,
+            Grupo RV), e foram eles que me ensinaram a defender uma decisão
+            de design pra um CFO que nunca abriu um Figma.
+          </p>
+
+          <h2>Trajetória</h2>
+          <p>
+            Em 2022 fui pra Liqi Digital Assets como Senior Product Designer,
+            principal designer na squad Tokenize. Primeira experiência
+            cripto/web3 sob escala institucional. Naquele mesmo ano comecei
+            como Head de Design na <strong>Guidance</strong>, posição que
+            ocupo até hoje, e onde a equipe e eu construímos práticas de
+            design que articulam IA, dados e produto.
+          </p>
+
+          <p>
+            Em 2023, fui convidado como Lead UX Consultant pela
+            <strong>Neodent (Straumann Group)</strong> pra liderar o redesign
+            do app LATAM. O app foi lançado no INCongresse 2024 e premiado
+            no <em>Straumann Group Global Marketing &amp; Commercial Excellence
+            Awards</em>. Em paralelo, conduzi trabalhos para Cultura Inglesa,
+            Sesc RJ, Programa Feedback, e atualmente o Senac RJ.
+          </p>
+
+          <h2>Modo de trabalhar</h2>
+          <p>
+            Atuo como senior IC em squad, líder de time, ou consultor
+            estratégico conforme o contexto pede. Frequentemente opero como
+            product manager também. Sou eu quem prioriza, quem desenha o
+            roadmap, quem decide o que não construir. Design em nível sênior
+            é exercício de operação tanto quanto de craft.
+          </p>
+
+          <p>
+            A parte craft eu cuido com obsessão por sistema: tokens,
+            governança, escalabilidade. Não sou o designer que produz a
+            tela mais bonita do squad. Sou o que constrói o sistema que
+            faz cinco designers produzirem trabalho coerente sob prazo.
+          </p>
+
+          <p>
+            Não acredito em design thinking como ritual. Acredito em
+            discovery rigoroso, evidência forte, trade-off nomeado, e
+            reflexão honesta sobre o que falhou. As três últimas habilidades
+            são as que mais demoraram a aparecer pra mim. Continuo aprendendo
+            as três.
+          </p>
+
+          <h2>O que ainda estou ajustando</h2>
+          <p>
+            Equilíbrio entre profundidade e velocidade. Tendo a entrar fundo
+            demais em discovery quando o cliente precisa de uma decisão em
+            3 dias. Aprendi a fazer "discovery em 72 horas com hipótese
+            explícita pra revisar depois". É um músculo recente. Também
+            estou em fim de MBA na USP, que está me ensinando vocabulário
+            de business muito mais formal. Bom pra falar com C-level, novo
+            pra mim.
+          </p>
+
+          <h2>Fora do trabalho</h2>
+          <p>
+            Moro no Rio. Casado, dois cachorros. Construo uma chácara nos
+            fins de semana. Projeto físico que é tão estratégico quanto
+            qualquer produto que já liderei: orçamento, sequência de fases,
+            definir o que NÃO construir agora.
+          </p>
+
+          <h2>Formação</h2>
+          <ul class="bio-list">
+            <li>
+              <strong>MBA Executivo em Digital Business.</strong> Universidade
+              de São Paulo (USP), 2024 a 2026
+            </li>
+            <li>
+              <strong>Superior em Design de Interação.</strong> UNINASSAU,
+              2020 a 2023
+            </li>
+          </ul>
+
+          <h2>Falar comigo</h2>
+          <p>
+            <a href="mailto:pedrosantosdesigner@outlook.com">Email</a> ·
+            <a href="https://wa.me/5522999675972" rel="noopener noreferrer" target="_blank">WhatsApp</a> ·
+            <a href="https://www.linkedin.com/in/pedrosantosd" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+          </p>
+        </div>
+
+        <aside class="about-portrait" aria-hidden="true">
+          {/* Pedro: adicionar foto em /public/portrait.avif (480x640, p&b ou sutil) */}
+          <div class="portrait-placeholder">
+            <span>Foto · 480×640</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about-page {
+    padding-block: var(--space-3xl) var(--space-4xl);
+  }
+
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  @media (min-width: 900px) {
+    .about-layout {
+      grid-template-columns: 1fr minmax(0, 280px);
+      gap: var(--space-3xl);
+    }
+  }
+
+  .about-content h1 {
+    font-size: clamp(2.5rem, 4vw + 0.5rem, 3.5rem);
+    margin-bottom: var(--space-xl);
+  }
+
+  .about-content h2 {
+    font-size: var(--text-xl);
+    font-family: var(--font-display);
+    font-weight: 400;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .bio-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bio-list li {
+    margin-bottom: var(--space-sm);
+    color: var(--fg-secondary);
+  }
+
+  .bio-list strong {
+    color: var(--fg-primary);
+  }
+
+  .about-portrait {
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+  }
+
+  .portrait-placeholder {
+    aspect-ratio: 3 / 4;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-muted);
+    font-size: var(--text-xs);
+  }
+</style>
