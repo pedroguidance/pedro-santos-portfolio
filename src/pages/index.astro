@@ -44,26 +44,31 @@ cases.sort((a, b) => a.data.order - b.data.order);
       <h2 id="what-heading">O que eu faço</h2>
 
       <p>
-        Faço produto digital em escala, do discovery ao lançamento,
-        passando por estratégia, design system e arquitetura de serviço.
-        UI é a parte que eu mais amo dentro disso tudo.
+        Atuo em produto digital há quase 10 anos, do discovery ao
+        lançamento. Estratégia, pesquisa, arquitetura, design system,
+        UI, motion e handoff são parte do escopo. Frequentemente também
+        priorização e roadmap, em coordenação com product e engenharia.
       </p>
 
       <p>
-        Gosto de estar onde a decisão é tomada. Quando faz sentido, opero
-        também como product manager, priorizando, desenhando roadmap,
-        decidindo o que não entra.
+        Design em escala não é estética sobre tela. É coordenação de
+        decisão entre pessoas que não falam o mesmo idioma. Por isso
+        passo tanto tempo lendo o problema quanto desenhando solução.
+        E mais tempo ainda mantendo todo mundo olhando pra mesma coisa.
       </p>
 
       <p>
-        Hoje sou Head of Design at Guidance e Lead UX Consultant na
-        Neodent (Straumann Group LATAM). Faço MBA em Digital Business
-        na USP. Moro no Rio, trabalho remoto.
+        Atuei em saúde dental (Neodent, Straumann), educação (Cultura
+        Inglesa, Sesc RJ, Senac RJ), varejo (Oficina Reserva, Programa
+        Feedback), fintech (Liqi, BS2) e turismo (123 Milhas). Head of
+        Design at Guidance, Lead UX Consultant na Neodent. MBA em
+        Digital Business pela USP.
       </p>
 
       <p>
-        Os cases abaixo são os mais recentes e relevantes. Cada um conta
-        uma decisão, não uma sequência de telas.
+        Os cases abaixo são uma seleção do que pude documentar
+        publicamente. Quatro recortes que cobrem ângulos diferentes do
+        trabalho.
       </p>
     </div>
   </section>
@@ -87,19 +92,17 @@ cases.sort((a, b) => a.data.order - b.data.order);
       </p>
 
       <ul class="contact-list">
-        {footerLinks
-          .filter(l => l.label !== 'Decisões')
-          .map(link => (
-            <li>
-              <a
-                href={link.href}
-                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                target={link.href.startsWith('http') ? '_blank' : undefined}
-              >
-                {link.label} →
-              </a>
-            </li>
-          ))}
+        {footerLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+            >
+              {link.label} →
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   </section>

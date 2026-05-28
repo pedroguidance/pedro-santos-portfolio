@@ -3,7 +3,7 @@
 **Head of Design | Lead UX | Product Design Leader**
 
 Rio de Janeiro, RJ — Brasil (Remoto) · +55 22 99967-5972 · pedrosantosdesigner@outlook.com
-LinkedIn: linkedin.com/in/pedrosantosd · Portfólio: pedrosantos.framer.website
+LinkedIn: linkedin.com/in/pedrosantosd · Portfólio: pedro-santos-portfolio.vercel.app
 
 ---
 

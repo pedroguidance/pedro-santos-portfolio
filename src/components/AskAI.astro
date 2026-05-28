@@ -573,7 +573,7 @@
     }
 
     /** Site-internal paths the AI is allowed to link to (auto-prefix if relative). */
-    const KNOWN_PATHS = /^(cases\/[a-z0-9-]+|sobre|conversar|decisoes)$/i;
+    const KNOWN_PATHS = /^(cases\/[a-z0-9-]+|sobre|conversar)$/i;
 
     function inline(s: string): string {
       // Markdown links [text](url) — normalize bare site paths and block dangerous schemes

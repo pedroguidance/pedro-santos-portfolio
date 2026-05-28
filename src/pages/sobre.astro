@@ -50,9 +50,10 @@ export const prerender = true;
 
           <h2>Fora do trabalho</h2>
           <p>
-            Moro no Rio. Casado, dois cachorros. Estou construindo uma
-            chácara nos fins de semana. Esse projeto tem ocupado boa
-            parte da minha cabeça quando não estou trabalhando.
+            Moro no Rio. Casado, dois cachorros. Amo viajar, conhecer
+            outras culturas e ouvir histórias de quem vive de um jeito
+            diferente do meu. Boa parte do que aprendi sobre design veio
+            de prestar atenção em gente real, fora de tela.
           </p>
 
           <h2>Formação</h2>
@@ -75,9 +76,25 @@ export const prerender = true;
           </p>
         </div>
 
-        <aside class="about-portrait" aria-hidden="true">
-          {/* Pedro: adicionar foto em /public/portrait.avif (480x640, p&b ou sutil) */}
-          <div class="portrait-placeholder">
+        <aside class="about-portrait">
+          {/*
+            Pedro: coloque um arquivo de imagem em:
+              c:/Users/pedro/Documents/Portfólio - IA/public/portrait.avif
+
+            Formatos aceitos: .avif (preferido), .webp, .jpg, .png.
+            Proporção ideal: 3:4 vertical, ~480×640 ou maior.
+            Se usar outro formato/nome, atualize o src abaixo.
+          */}
+          <img
+            src="/portrait.avif"
+            alt="Pedro Santos"
+            width="480"
+            height="640"
+            loading="lazy"
+            decoding="async"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="portrait-placeholder" style="display: none;">
             <span>Foto · 480×640</span>
           </div>
         </aside>
@@ -136,6 +153,17 @@ export const prerender = true;
     align-self: start;
     position: sticky;
     top: calc(var(--header-height) + var(--space-lg));
+  }
+
+  .about-portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 4px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    display: block;
   }
 
   .portrait-placeholder {

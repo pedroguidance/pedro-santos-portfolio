@@ -64,7 +64,6 @@ Sua função é responder dúvidas de recrutadores, líderes de design, executiv
 - **CV em PDF**: https://drive.google.com/file/d/1uednCbYBAz0rdKITYQb9EQCRVK1_PEZ6/view?usp=sharing
 - **Página de contato**: /conversar
 - **Sobre**: /sobre
-- **Decisões do portfólio**: /decisoes
 
 ## Páginas dos cases (use estes paths EXATOS quando linkar para um case)
 

@@ -6,8 +6,9 @@ import ThemeToggle from './ThemeToggle.astro';
 <header class="header">
   <div class="container header-inner">
     <a href="/" class="brand" aria-label="Pedro Santos. Home">
-      <span class="brand-mark" aria-hidden="true">PS</span>
-      <span class="brand-name">Pedro Santos</span>
+      <span class="brand-text">
+        <span class="brand-first">pedro</span><span class="brand-space"> </span><span class="brand-last">santos</span><span class="brand-dot" aria-hidden="true">.</span>
+      </span>
     </a>
 
     <nav aria-label="Navegação principal">
@@ -44,42 +45,71 @@ import ThemeToggle from './ThemeToggle.astro';
   }
 
   .brand {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
+    display: inline-flex;
+    align-items: baseline;
     text-decoration: none;
     color: var(--fg-primary);
-    font-family: var(--font-display);
-    font-size: var(--text-md);
-    font-weight: 500;
+    transition: color var(--dur-fast) var(--ease-out-quad);
   }
 
   .brand:hover {
     color: var(--fg-primary);
   }
 
-  .brand-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: var(--accent);
-    color: var(--on-accent);
-    border-radius: 4px;
-    font-family: var(--font-display);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+  .brand:hover .brand-dot {
+    transform: translateY(-2px);
   }
 
-  .brand-name {
+  .brand-text {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  .brand-first {
+    color: var(--fg-primary);
+  }
+
+  .brand-last {
+    color: var(--fg-secondary);
+  }
+
+  .brand-dot {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 0;
+    margin-left: 0.05em;
+    display: inline-block;
+    transition: transform var(--dur-base) var(--ease-out-expo);
+    will-change: transform;
+  }
+
+  /* Mobile: show only "pedro." to save space */
+  .brand-space,
+  .brand-last {
     display: none;
   }
 
-  @media (min-width: 640px) {
-    .brand-name {
+  @media (min-width: 480px) {
+    .brand-space,
+    .brand-last {
       display: inline;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-dot {
+      transition: none;
+    }
+    .brand:hover .brand-dot {
+      transform: none;
     }
   }
 

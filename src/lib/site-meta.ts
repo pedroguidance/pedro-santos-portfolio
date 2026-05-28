@@ -26,6 +26,4 @@ export const footerLinks = [
   { label: 'Email', href: `mailto:${site.author.email}` },
   { label: 'WhatsApp', href: `https://wa.me/${site.author.whatsapp}` },
   { label: 'LinkedIn', href: site.author.linkedin },
-  { label: 'Currículo', href: site.author.cv },
-  { label: 'Decisões', href: '/decisoes' },
 ] as const;
