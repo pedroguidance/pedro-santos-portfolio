@@ -1,0 +1,132 @@
+---
+/**
+ * AutoCarousel — infinite horizontal scroll of a single wide image.
+ *
+ * The image is duplicated side-by-side and the whole strip is translated
+ * by -50% (one image width) over `duration` seconds, linear, infinite.
+ * Because the strip seamlessly tiles, the loop appears continuous.
+ *
+ * Respects prefers-reduced-motion: keeps the image static.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  /** Strip travel time per cycle (seconds). Smaller = faster. */
+  duration?: number;
+  /** Caption rendered below the carousel. */
+  caption?: string;
+  /** Optional max-width for the carousel container. */
+  maxWidth?: string;
+}
+
+const {
+  src,
+  alt,
+  duration = 30,
+  caption,
+  maxWidth = 'var(--max-wide)',
+} = Astro.props;
+---
+
+<figure
+  class="auto-carousel"
+  style={`--carousel-duration: ${duration}s; --carousel-max-width: ${maxWidth};`}
+>
+  <div class="auto-carousel__viewport">
+    <div class="auto-carousel__track">
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      <img src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+    </div>
+    <div class="auto-carousel__fade auto-carousel__fade--left" aria-hidden="true"></div>
+    <div class="auto-carousel__fade auto-carousel__fade--right" aria-hidden="true"></div>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .auto-carousel {
+    width: 100%;
+    max-width: var(--carousel-max-width);
+    margin: var(--space-xl) auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .auto-carousel__viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+
+  .auto-carousel__track {
+    display: flex;
+    width: max-content;
+    animation: carousel-scroll var(--carousel-duration) linear infinite;
+    will-change: transform;
+  }
+
+  .auto-carousel__track img {
+    display: block;
+    height: auto;
+    flex-shrink: 0;
+    /* Each copy takes its natural width — the track is twice the source */
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .auto-carousel__track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes carousel-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .auto-carousel__track {
+      animation: none;
+    }
+  }
+
+  /* Subtle fade on the edges — barely perceptible, just to soften the loop seam */
+  .auto-carousel__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 5%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .auto-carousel__fade--left {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--bg-canvas) 70%, transparent) 0%,
+      transparent 100%
+    );
+  }
+
+  .auto-carousel__fade--right {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      color-mix(in oklch, var(--bg-canvas) 70%, transparent) 0%,
+      transparent 100%
+    );
+  }
+
+  figcaption {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+    text-align: center;
+    line-height: 1.5;
+    max-width: var(--max-prose);
+    margin-inline: auto;
+  }
+</style>

@@ -1,21 +1,47 @@
 ---
 const logos = [
-  { name: 'Guidance', label: 'Guidance' },
-  { name: 'Straumann / Neodent', label: 'Straumann' },
-  { name: 'Cultura Inglesa', label: 'Cultura Inglesa' },
-  { name: 'Sesc RJ', label: 'Sesc RJ' },
-  { name: 'Arezzo & Co', label: 'Arezzo & Co' },
+  { name: 'sesc', label: 'Sesc RJ', src: '/logos/sesc.png' },
+  { name: 'senac', label: 'Senac', src: '/logos/senac.png' },
+  { name: 'cultura-inglesa', label: 'Cultura Inglesa', src: '/logos/cultura-inglesa.png' },
+  { name: 'straumann', label: 'Straumann (Neodent)', src: '/logos/straumann.png' },
+  { name: 'neodent', label: 'Neodent', src: '/logos/neodent.png' },
+  { name: 'oficina-reserva', label: 'Oficina Reserva (Arezzo)', src: '/logos/oficina-reserva.png' },
+  { name: '123milhas', label: '123 Milhas', src: '/logos/123milhas.png' },
+  { name: 'liqi', label: 'Liqi Digital Assets', src: '/logos/liqi.png' },
+  { name: 'bs2', label: 'Banco BS2', src: '/logos/bs2.png' },
 ];
 ---
 
 <section class="logo-strip" aria-label="Marcas com quem trabalhei">
-  <ul class="logo-strip-list">
-    {logos.map(logo => (
-      <li>
-        <span class="logo-text">{logo.label}</span>
-      </li>
-    ))}
-  </ul>
+  <div class="logo-strip-viewport">
+    <ul class="logo-strip-track" aria-hidden="false">
+      {logos.map(logo => (
+        <li class={`logo-item logo-${logo.name}`}>
+          <img
+            src={logo.src}
+            alt={logo.label}
+            loading="lazy"
+            decoding="async"
+            height="36"
+          />
+        </li>
+      ))}
+      {/* Duplicate the list to create a seamless infinite loop */}
+      {logos.map(logo => (
+        <li class={`logo-item logo-${logo.name}`} aria-hidden="true">
+          <img
+            src={logo.src}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            height="36"
+          />
+        </li>
+      ))}
+    </ul>
+    <div class="logo-strip-fade logo-strip-fade--left" aria-hidden="true"></div>
+    <div class="logo-strip-fade logo-strip-fade--right" aria-hidden="true"></div>
+  </div>
   <p class="logo-caption">
     Marcas com quem trabalhei nos últimos 10 anos.
   </p>
@@ -27,26 +53,140 @@ const logos = [
     border-block: 1px solid var(--border);
   }
 
-  .logo-strip-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-xl);
-    margin: 0;
+  .logo-strip-viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
   }
 
-  .logo-text {
-    font-family: var(--font-display);
-    font-size: var(--text-md);
-    font-weight: 500;
-    color: var(--fg-secondary);
-    letter-spacing: -0.01em;
+  .logo-strip-track {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xl);
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: logo-scroll 55s linear infinite;
+    will-change: transform;
+  }
+
+  .logo-strip-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes logo-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-strip-track {
+      animation: none;
+    }
+  }
+
+  /* Each logo sits centered inside a tall row so we can match the
+     perceived size of the WORDMARK across logos with very different
+     ratios. Logos where the wordmark is a small % of the artwork
+     (Neodent, Senac, Cultura Inglesa) need much taller image heights
+     than logos that are mostly wordmark (Sesc, Straumann, BS2). */
+  .logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 72px;
+    flex: 0 0 auto;
+  }
+
+  .logo-item img {
+    width: auto;
+    object-fit: contain;
+    /*
+     * Crush every logo to a uniform dark silhouette.
+     * brightness(0) → black; saturate(0) drops any leftover hue.
+     */
+    filter: brightness(0) saturate(0);
+    opacity: 0.6;
+    transition:
+      opacity 200ms ease,
+      filter 200ms ease;
+  }
+
+  .logo-item:hover img,
+  .logo-item:focus-within img {
+    opacity: 0.95;
+  }
+
+  /* Per-logo heights calibrated so the WORDMARK reads at roughly the
+     same x-height across all 9 logos. Wordmark-only logos stay small
+     (32-44px); logos with thin or vertically-stacked wordmarks scale up. */
+  .logo-sesc img            { height: 44px; } /* big bold wordmark */
+  .logo-senac img           { height: 58px; } /* small wordmark under swoosh */
+  .logo-cultura-inglesa img { height: 56px; } /* small 2-line wordmark + lion */
+  .logo-straumann img       { height: 32px; } /* huge wordmark already */
+  .logo-neodent img         { height: 54px; } /* tiny wordmark next to "C" mark */
+  .logo-oficina-reserva img { height: 52px; } /* "Oficina" mid + "RESERVA" small */
+  .logo-123milhas img       { height: 60px; } /* vertical layout, numbers + "milhas" */
+  .logo-liqi img            { height: 42px; } /* wordmark + cube, both big */
+  .logo-bs2 img             { height: 44px; } /* wordmark dominates */
+
+  /* Dark mode: flip the crushed black to white */
+  :global([data-theme='dark']) .logo-item img {
+    filter: brightness(0) invert(1);
+    opacity: 0.55;
+  }
+
+  :global([data-theme='dark']) .logo-item:hover img,
+  :global([data-theme='dark']) .logo-item:focus-within img {
+    opacity: 0.9;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .logo-item img {
+      filter: brightness(0) invert(1);
+      opacity: 0.55;
+    }
+    :global(:root:not([data-theme='light'])) .logo-item:hover img,
+    :global(:root:not([data-theme='light'])) .logo-item:focus-within img {
+      opacity: 0.9;
+    }
+  }
+
+  /* Subtle edge fade so the loop seam stays invisible */
+  .logo-strip-fade {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .logo-strip-fade--left {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      color-mix(in oklch, var(--bg-canvas) 80%, transparent) 0%,
+      transparent 100%
+    );
+  }
+
+  .logo-strip-fade--right {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      color-mix(in oklch, var(--bg-canvas) 80%, transparent) 0%,
+      transparent 100%
+    );
   }
 
   .logo-caption {
-    margin-top: var(--space-md);
+    margin-top: var(--space-lg);
     margin-bottom: 0;
+    margin-inline: auto;
+    max-width: none;
+    width: 100%;
     font-size: var(--text-xs);
     color: var(--fg-muted);
     letter-spacing: 0.02em;
@@ -54,18 +194,25 @@ const logos = [
   }
 
   @media (max-width: 640px) {
-    .logo-strip-list {
-      justify-content: center;
-      gap: var(--space-md) var(--space-lg);
+    .logo-strip-track {
+      gap: var(--space-xl);
+      animation-duration: 40s;
     }
-    .logo-text {
-      font-size: var(--text-sm);
-    }
+    .logo-item                { height: 52px; }
+    .logo-sesc img            { height: 32px; }
+    .logo-senac img           { height: 42px; }
+    .logo-cultura-inglesa img { height: 40px; }
+    .logo-straumann img       { height: 22px; }
+    .logo-neodent img         { height: 38px; }
+    .logo-oficina-reserva img { height: 38px; }
+    .logo-123milhas img       { height: 44px; }
+    .logo-liqi img            { height: 30px; }
+    .logo-bs2 img             { height: 32px; }
   }
 
-  /*
-   * Pedro: quando tiver logos SVG dos clientes, substituir o <span>
-   * por <img src="/logos/guidance.svg" alt="Guidance" />. Manter logos
-   * em SVG inline ou /public/logos/ + currentColor pra adaptar ao tema.
-   */
+  @media (prefers-reduced-motion: reduce) {
+    .logo-item img {
+      transition: none;
+    }
+  }
 </style>

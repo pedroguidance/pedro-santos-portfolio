@@ -34,6 +34,8 @@ publishedAt: 2026-05-26
 
 import IPhoneMockup from '~/components/IPhoneMockup.astro';
 import IPhoneSequence from '~/components/IPhoneSequence.astro';
+import IPhoneScrollMockup from '~/components/IPhoneScrollMockup.astro';
+import AutoCarousel from '~/components/AutoCarousel.astro';
 
 ## A situação
 
@@ -76,17 +78,127 @@ Uma semana em campo no Rio. Análise da cultura institucional. Entrevistas cross
 
 A descoberta-chave: **as pessoas não queriam "mais funcionalidades". Elas queriam acesso rápido, simples e previsível aos serviços que já existiam.**
 
+![Mapeamento de arquitetura sistêmica do credenciamento. Três sistemas conectados (App, Solicitação, SCM) com cada tela do app especificada por callback e responsabilidade](/cases/sesc-discovery-arquitetura.webp)
+
+*Acima: arquitetura sistêmica do credenciamento. Mapeei a comunicação entre o app, o sistema interno de solicitação, e o SCM (legado). Cada quadro especifica o que aquela tela faz, e cada seta nomeia o callback que aciona a próxima. O mapa explicita por que credenciais existentes podem ser validadas sem ida presencial, e onde estão os pontos de integração crítica.*
+
 ## A priorização em três MVPs
 
-A estratégia central foi faseamento por valor mais complexidade. Cada MVP entrega ciclo completo de valor pra usuário e operação antes de mover pro próximo. Os cards abaixo sintetizam o escopo de cada fase.
+A estratégia central foi faseamento por valor mais complexidade. Dividimos a entrega em **três MVPs**, cada um com escopo declarado, valor para usuário e valor pra operação. Os cards abaixo sintetizam.
 
-### Por que essa priorização faz sentido
-
-- **MVP 1** entrega valor imediato com baixo esforço técnico. Responde às demandas mais acessadas hoje no portal e estabelece a base da experiência digital do Sesc.
-- **MVP 2** ativa fluxos de alto engajamento (sorteios, ingressos), com aumento controlado de complexidade. Amplia autonomia do usuário e reduz gargalos presenciais.
-- **MVP 3** fecha o ciclo com a experiência de maior valor percebido e impacto direto na conversão, fidelização e ocupação das unidades de hospedagem.
+**Status atual**: o **MVP 1 está em produção**, com todas as telas mostradas abaixo no ar. O **MVP 2 está em desenvolvimento agora**, com foco em sorteios, credenciamento remoto e ingressos online. O **MVP 3** (turismo social) virá em seguida, fechando o ciclo do ecossistema.
 
 Faseamento como **estratégia de viabilização**, não como cronograma. A liderança aprovou. O faseamento priorizou viabilidade sobre abrangência, e foi o que destravou a entrega depois de uma década travada.
+
+## MVP 1, em produção. O que está no ar
+
+Tudo abaixo já está rodando no app. As decisões de discovery, arquitetura e design system foram entregues e os usuários estão usando.
+
+### Credencial digital. O ativo crítico
+
+A **credencial digital** abre o app. É a feature mais acessada hoje no portal Sesc (validação de carteirinha pra acessar unidades, eventos, hospedagens). Trazer isso pro app com código de barras escaneável e suporte a dependentes elimina a necessidade do plástico físico, e ao mesmo tempo destrava o acesso pra quem perdeu a credencial.
+
+Funciona offline porque a credencial é o ativo mais crítico: o app precisa renderizar mesmo sem rede, no instante da entrada na unidade.
+
+<div class="mockup-grid">
+  <IPhoneMockup
+    src="/cases/sesc-fit-credencial.webp"
+    alt="Tela de credencial digital no app Sesc. Foto do titular, nome, tipo de credencial, validade, código de acesso e código de barras escaneável."
+    caption="Credencial digital do titular. Código de barras lido no acesso às unidades."
+    size="md"
+  />
+</div>
+
+### Arquitetura de informação que respeita 5 áreas
+
+O Sesc oferece serviços em **cultura, saúde, lazer, turismo social e educação**. A tentação inicial era tratar tudo igual no app. Recusamos. Trabalhei uma hierarquia que dá hub pra todas as áreas mas reconhece que **Cultura tem o maior volume de navegação**, e por isso vira a primeira camada visível.
+
+Cada área ganha um card visual próprio na home, com fotografia de alto contraste e tipografia que carrega a identidade do Sesc. O carrossel abaixo mostra esses cards rolando como aparecem no app.
+
+<AutoCarousel
+  src="/cases/sesc-areas-cards.webp"
+  alt="Cards das cinco áreas do Sesc com fotografias vibrantes e label da área: +Cultura, +Social, e demais áreas"
+  duration={32}
+  caption="Cards das áreas do app Sesc, rolando como na home. Cada card abre a área correspondente com programação e serviços filtrados."
+  maxWidth="var(--max-wide)"
+/>
+
+### Programações culturais como o gancho de retorno
+
+Cultura é a área que mais traz o usuário de volta ao app. Eventos como Jazz & Blues, festivais e espetáculos têm sazonalidade e push notifications relevantes. A tela de detalhe foi desenhada com hero forte, ações claras (saiba mais, outros shows), seção de **relacionados**, áreas conectadas (Vem viver, O Sesc é pra você), e banner inferior que ata a credencial à experiência. Tudo em uma tela só, scrollável.
+
+<div class="mockup-grid">
+  <IPhoneScrollMockup
+    src="/cases/sesc-jazz-long-screen.webp"
+    alt="Tela completa de detalhe do evento Jazz & Blues no app Sesc, com hero, ações, relacionados, próximos eventos, Vem viver com cards +Cultura e +Social, O Sesc é pra você, e banner inferior de credenciamento."
+    caption="Tela completa do detalhe de evento, scrollando automaticamente do hero até o banner de credenciamento."
+    size="md"
+    scrollAmount={62}
+    duration={20}
+  />
+</div>
+
+### Unidades e hotéis. Presença física conectada ao digital
+
+O Sesc tem dezenas de unidades e hotéis pelo estado do Rio. A tela de unidade conecta a presença física ao digital: descrição, localização com mapa, lista de cursos e oficinas disponíveis naquela unidade, e — quando aplicável — botão de reserva (no MVP 1, só pra visualização; a reserva com checkout vem no MVP 3).
+
+<div style="margin: var(--space-2xl) auto; max-width: 360px; display: flex; justify-content: center;">
+  <IPhoneSequence
+    screens={[
+      {
+        src: '/cases/sesc-fit-hotel-listagem.webp',
+        alt: 'Listagem de hotéis Sesc com promoções sazonais',
+      },
+      {
+        src: '/cases/sesc-fit-hotel-mapa.webp',
+        alt: 'Detalhe da unidade com descrição e mapa de localização',
+      },
+      {
+        src: '/cases/sesc-fit-hotel-cursos.webp',
+        alt: 'Detalhe da unidade com lista de cursos e oficinas disponíveis',
+      },
+    ]}
+    caption="Fluxo de unidade. Listagem → detalhe com mapa → lista de cursos e oficinas. Cada tela troca a cada 3 segundos."
+    size="md"
+    duration={3000}
+  />
+</div>
+
+### Spec da busca: micro-decisões que destravaram a entrega
+
+Pra ilustrar o nível de detalhe das specs, abaixo o fluxo de busca documentado tela a tela. Cada callout marca uma decisão de produto: comportamento do auto-focus, definição do índice, transição pra página relevante, empty state. **Esse tipo de spec é o que destravou a entrega de uma instituição que estava parada há uma década** — não basta entregar UI, é preciso entregar decisão.
+
+![Spec do fluxo de busca do app Sesc. Quatro telas em sequência: estado inicial com termos mais buscados, busca ativa com teclado, resultados de Flamengo (Bistrô Sesc, Cardápio, Espaço Cultural), empty state Nenhum resultado encontrado. Callouts roxos anotam decisões de produto em cada transição](/cases/sesc-app-busca.webp)
+
+*Acima: spec do fluxo de busca, com decisões anotadas. Termos mais buscados como onboarding, auto-focus no campo ao tocar, lista de resultados ordenada por relevância de unidade, empty state com mensagem clara.*
+
+<div style="margin: var(--space-2xl) auto; max-width: 360px; display: flex; justify-content: center;">
+  <IPhoneSequence
+    screens={[
+      {
+        src: '/cases/sesc-fit-busca-inicial.webp',
+        alt: 'Tela inicial do fluxo de busca com termos mais buscados'
+      },
+      {
+        src: '/cases/sesc-fit-busca-resultados.webp',
+        alt: 'Resultados da busca por Flamengo mostrando 3 itens'
+      },
+      {
+        src: '/cases/sesc-fit-busca-empty.webp',
+        alt: 'Empty state da busca: Nenhum resultado encontrado'
+      },
+    ]}
+    caption="Fluxo de busca em navegação. Termos mais buscados → resultados → empty state. Cada tela troca a cada 3 segundos."
+    size="md"
+    duration={3000}
+  />
+</div>
+
+## MVP 2, em desenvolvimento agora
+
+Em produção: sorteios pra engajamento, **credenciamento digital remoto** (fim da ida presencial pra emitir credencial), e **ingressos com checkout** pra eventos. Continuação natural do MVP 1: amplia autonomia, reduz fila, e diminui o custo operacional da instituição.
+
+A arquitetura sistêmica do credenciamento (mapeada no diagrama acima) já antecipou o MVP 2 ao definir os callbacks de aprovação e reprovação remota. O desenho do MVP 1 carregou o MVP 2 na própria estrutura.
 
 ## O desafio invisível. Mudança de mentalidade
 
@@ -94,27 +206,13 @@ A parte mais difícil do trabalho não foi design. Foi convencer a instituição
 
 Documentei essa jornada porque ela é replicável: instituições com história longa só absorvem digital depois de uma mudança de leitura interna. Não basta entregar um app; é preciso entregar a leitura.
 
-## Roadmap futuro. O que vem depois do MVP 3
-
-Mapeamos sete oportunidades de evolução pós-MVP 3, cada uma com valor declarado pra usuário e pro Sesc. Esse mapa serve de contrato com a próxima liderança técnica.
-
-| Funcionalidade | Valor para o usuário | Valor para o Sesc |
-| --- | --- | --- |
-| Aviso pré-evento via WhatsApp | Lembretes personalizados, menos esquecimentos | Aumento de comparecimento e engajamento em eventos |
-| Suporte com IA | Atendimento 24/7 com respostas precisas | Redução de custos operacionais |
-| Monitoramento de lotação (piscinas, hotéis) | Planejamento de visita, sem aglomeração | Gestão de ocupação e segurança |
-| Notícias e publicações | Informação atualizada sobre eventos e cursos | Canal direto, transparência institucional |
-| Agendamentos do SESC+Saúde | Marcar consultas e exames com lembretes | Otimização do fluxo de atendimento |
-| Gerenciamento educacional (inscrição e pagamento) | Inscrição simplificada em cursos | Automatização administrativa, mais adesão |
-| Programa de gamificação/fidelidade | Recompensas por participação ativa | Fidelização e mais frequência de uso |
-
 ## Reflection
 
 A maior lição: design no setor público / institucional não é menos rigoroso. É **mais**. A instituição não tem investidor pressionando velocidade, mas tem responsabilidade pública, opinião de conselho, e legado histórico. O processo é mais lento; a decisão é mais consequente.
 
 Eu me peguei várias vezes querendo "atalhar" decisões que num produto privado eu atalharia. No Sesc, atalhar era arriscado, e o método mais lento provou ser o mais rápido em retrospecto.
 
-A segunda lição: a estrutura de MVPs com pilares explícitos e roadmap futuro documentado foi o que destravou conversas com diferentes níveis da instituição. Direção entendia o "porquê" via pilares. Técnico entendia o "como" via MVPs. Operação entendia o "quando" via roadmap. **Mesma realidade em três camadas comunicativas.**
+A segunda lição: a estrutura de MVPs com pilares explícitos foi o que destravou conversas com diferentes níveis da instituição. Direção entendia o "porquê" via pilares. Técnico entendia o "como" via MVPs. Operação entendia o "quando" via faseamento. **Mesma realidade em três camadas comunicativas.**
 
 ## Créditos
 
