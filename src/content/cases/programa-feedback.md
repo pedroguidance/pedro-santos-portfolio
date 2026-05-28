@@ -53,9 +53,9 @@ Mapeamos a operação real (não a documentada) em notação BPMN, ponta a ponta
 
 Tabulação de dados de pesquisa, clusterização de fricções, análise de dependências. Benchmark com 6 operações comparáveis de field sales LATAM e global. Produzimos três cenários TO BE com trade-offs explícitos:
 
-1. **Cenário 1 — incremental.** Resolve fricções pontuais sem mexer no modelo. Baixo risco político, baixo retorno operacional.
-2. **Cenário 2 — intermediário.** Reestrutura o fluxo principal e introduz IA em pontos críticos. Mantém o modelo trabalhista. Risco e retorno moderados.
-3. **Cenário 3 — ruptura.** Redesenha o modelo do zero, com flexibilização contratual e IA pervasiva. Alto risco político, máximo retorno.
+1. **Cenário 1, incremental.** Resolve fricções pontuais sem mexer no modelo. Baixo risco político, baixo retorno operacional.
+2. **Cenário 2, intermediário.** Reestrutura o fluxo principal e introduz IA em pontos críticos. Mantém o modelo trabalhista. Risco e retorno moderados.
+3. **Cenário 3, ruptura.** Redesenha o modelo do zero, com flexibilização contratual e IA pervasiva. Alto risco político, máximo retorno.
 
 A liderança escolheu o **cenário 2**, intermediário, não o mais ambicioso. Documentamos o porquê em ata formal, para revisitar a decisão depois quando o mercado e a tolerância política mudassem.
 

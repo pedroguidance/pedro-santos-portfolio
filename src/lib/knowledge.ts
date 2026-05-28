@@ -74,7 +74,6 @@ Sempre que mencionar um case, ofereça o link em formato markdown \`[Nome do cas
 - **Programa Feedback** (engenharia organizacional, Guidance): \`/cases/programa-feedback\`
 - **App Cultura Inglesa** (redesign + adoção): \`/cases/cultura-inglesa\`
 - **Sesc RJ** (primeira iniciativa digital em uma década): \`/cases/sesc-rj\`
-- **Senac RJ** (reestruturação de ecossistema, em andamento): \`/cases/senac-rj\`
 
 Exemplo correto: "Vale dar uma olhada no [case Neodent](/cases/neodent), que cobre o app premiado pela Straumann em 2024."
 Exemplo errado: "Vale dar uma olhada no case Neodent." (sem link), "[Neodent](/case/neodent)" (path errado, singular), "[Neodent](/cases/neodent.md)" (extensão).

@@ -1,6 +1,6 @@
-/* Design Tokens — Pedro Santos Portfolio
+/* Design Tokens . Pedro Santos Portfolio
  * Generated from design/design-spec.md
- * Single source of truth — referenced by all component styles
+ * Single source of truth . referenced by all component styles
  */
 
 :root {
@@ -55,7 +55,7 @@
   --tracking-body: 0;
   --tracking-meta: 0.04em;
 
-  /* Color tokens — LIGHT (default) */
+  /* Color tokens . LIGHT (default) */
   --bg-canvas: oklch(98% 0.005 90);
   --bg-surface: oklch(94% 0.005 90);
   --bg-surface-2: oklch(90% 0.005 90);
@@ -86,7 +86,7 @@
   --section-spacing: var(--space-4xl);
 }
 
-/* DARK mode — applied when user prefers OR explicitly toggles */
+/* DARK mode . applied when user prefers OR explicitly toggles */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --bg-canvas: oklch(13% 0.01 250);
